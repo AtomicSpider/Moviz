@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Moviz</string>
+
+    <!-- Actions -->
+    <string name="action_sort">Sort</string>
+
+    <!-- URLs -->
+    <string name="TMDB_BASE_POSTER_PATH">http://image.tmdb.org/t/p/w185</string>
+    <string name="TMDB_MOVIES_BASE_URL">http://api.themoviedb.org/3/movie/</string>
+</resources>
