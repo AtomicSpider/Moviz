@@ -30,6 +30,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Project : Moviz
  * Created by Sanat Dutta on 6/14/2016.
@@ -96,7 +99,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        Picasso.with(mContext).load(TMDB_BASE_POSTER_PATH + movieObjects.get(position).getPoster_path()).placeholder(R.drawable.placeholder_poster).into(holder.movie_poster_iv);
+        Picasso.with(mContext).load(TMDB_BASE_POSTER_PATH + movieObjects.get(position).getPoster_path()).placeholder(R.drawable.placeholder_poster).error(R.drawable.placeholder_error_poster).into(holder.movie_poster_iv);
         holder.movie_title_tv.setText(movieObjects.get(position).getOriginal_title());
 
         holder.movie_poster_iv.setOnClickListener(new View.OnClickListener() {
@@ -125,14 +128,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView movie_poster_iv;
-        private TextView movie_title_tv;
+        @BindView(R.id.movie_poster_iv)
+        ImageView movie_poster_iv;
+        @BindView(R.id.movie_title_tv)
+        TextView movie_title_tv;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            movie_poster_iv = (ImageView) itemView.findViewById(R.id.movie_poster_iv);
-            movie_title_tv = (TextView) itemView.findViewById(R.id.movie_title_tv);
+            ButterKnife.bind(this, itemView);
         }
     }
 

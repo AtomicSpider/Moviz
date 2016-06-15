@@ -16,6 +16,9 @@ import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
 import com.satandigital.moviz.models.RecyclerViewAdapter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Project : Moviz
  * Created by Sanat Dutta on 6/14/2016.
@@ -27,8 +30,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerViewAdapter mAdapter;
 
     //Views
-    private RecyclerView mRecyclerView;
-    private CircularProgressView mProgressView;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.progress_bar)
+    CircularProgressView mProgressView;
     private ActionBar mActionBar;
 
     //Data
@@ -39,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         setupActionBar();
-        findViews();
         setRecyclerView();
     }
 
@@ -54,12 +59,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
             mActionBar.setTitle("Top Rated");
     }
 
-    private void findViews() {
-        mProgressView = (CircularProgressView) findViewById(R.id.progress_bar);
-    }
-
     private void setRecyclerView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
         mAdapter = new RecyclerViewAdapter(MainActivity.this, sortType);
         mAdapter.setCallback(this);

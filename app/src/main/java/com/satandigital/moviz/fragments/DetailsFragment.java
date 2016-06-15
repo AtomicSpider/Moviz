@@ -11,6 +11,9 @@ import com.satandigital.moviz.R;
 import com.satandigital.moviz.models.MovieObject;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Project : Moviz
  * Created by Sanat Dutta on 6/15/2016.
@@ -20,8 +23,12 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
     private String TAG = DetailsFragment.class.getSimpleName();
 
     //Views
-    ImageView posterIV;
-    TextView titleTv, releaseDateTv, ratingTv, genreTv, overviewTv;
+    @BindView(R.id.poster) ImageView posterIV;
+    @BindView(R.id.original_title) TextView titleTv;
+    @BindView(R.id.release_date) TextView releaseDateTv;
+    @BindView(R.id.vote_average) TextView ratingTv;
+    @BindView(R.id.genre) TextView genreTv;
+    @BindView(R.id.overview) TextView overviewTv;
 
     //Data
     MovieObject movieObject;
@@ -30,26 +37,17 @@ public class DetailsFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        ButterKnife.bind(this, rootView);
 
         movieObject = getActivity().getIntent().getParcelableExtra("data");
         TMDB_BASE_POSTER_PATH = getActivity().getResources().getString(R.string.TMDB_BASE_POSTER_PATH);
-        findViews(rootView);
         setData();
 
         return rootView;
     }
 
-    private void findViews(View rootView) {
-        posterIV = (ImageView) rootView.findViewById(R.id.poster);
-        titleTv = (TextView) rootView.findViewById(R.id.original_title);
-        releaseDateTv = (TextView) rootView.findViewById(R.id.release_date);
-        ratingTv = (TextView) rootView.findViewById(R.id.vote_average);
-        genreTv = (TextView) rootView.findViewById(R.id.genre);
-        overviewTv = (TextView) rootView.findViewById(R.id.overview);
-    }
-
     private void setData() {
-        Picasso.with(getActivity()).load(TMDB_BASE_POSTER_PATH + movieObject.getPoster_path()).placeholder(R.drawable.placeholder_poster).into(posterIV);
+        Picasso.with(getActivity()).load(TMDB_BASE_POSTER_PATH + movieObject.getPoster_path()).placeholder(R.drawable.placeholder_poster).error(R.drawable.placeholder_error_poster).into(posterIV);
         titleTv.setText(movieObject.getOriginal_title());
         releaseDateTv.setText("(" + movieObject.getRelease_date() + ")");
         ratingTv.setText(String.valueOf(movieObject.getVote_average()));
