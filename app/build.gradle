@@ -17,7 +17,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'TMDB_API_KEY', "\"30d97ecfab9f36516d0e7c828d52db27\""
+        it.buildConfigField 'String', 'TMDB_API_KEY', MOVIZ_TMDB_API_KEY
     }
 }
 
