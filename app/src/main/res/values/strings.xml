@@ -4,6 +4,9 @@
     <!-- Actions -->
     <string name="action_sort">Sort</string>
 
+    <!-- Content Provider Related-->
+    <string name="provider">com.satandigital.moviz</string>
+
     <!-- URLs -->
     <string name="TMDB_BASE_POSTER_PATH">http://image.tmdb.org/t/p/w185</string>
     <string name="TMDB_BASE_BACKDROP_POSTER_PATH">http://image.tmdb.org/t/p/w500</string>

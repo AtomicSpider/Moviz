@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.models.MovieObject;
 import com.squareup.picasso.Picasso;
@@ -37,7 +38,7 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.genre)
     TextView genreTv;
     @BindView(R.id.overview)
-    TextView overviewTv;
+    ExpandableTextView overviewTv;
 
     //Data
     MovieObject movieObject;
