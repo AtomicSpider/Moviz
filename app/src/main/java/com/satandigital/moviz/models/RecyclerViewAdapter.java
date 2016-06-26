@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.satandigital.moviz.BuildConfig;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.DetailsActivity;
 import com.satandigital.moviz.common.AppCodes;
@@ -158,7 +159,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             String moviesJsonStr = null;
 
             String sortType = params[0];
-            String apiKey = mContext.getResources().getString(R.string.tmdb_api_key);
+            String apiKey = BuildConfig.TMDB_API_KEY;
 
             try {
                 final String API_KEY_PARAM = "api_key";
