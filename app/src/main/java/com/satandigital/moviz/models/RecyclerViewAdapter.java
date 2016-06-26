@@ -99,6 +99,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        Log.d(TAG, ""+position);
 
         Picasso.with(mContext).load(TMDB_BASE_POSTER_PATH + movieObjects.get(position).getPoster_path()).placeholder(R.drawable.placeholder_poster).error(R.drawable.placeholder_error_poster).into(holder.movie_poster_iv);
         holder.movie_title_tv.setText(movieObjects.get(position).getOriginal_title());
@@ -113,13 +114,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        if (position == movieObjects.size() - 1) {
+        /*if (position == movieObjects.size() - 1) {
             Log.i(TAG, "Reached final card");
             if (!isProcessOngoing) {
                 Log.i(TAG, "Requesting more Data");
                 new FetchMoviesTask(mContext).execute(sortType, Integer.toString(page + 1));
             }
-        }
+        }*/
     }
 
     @Override

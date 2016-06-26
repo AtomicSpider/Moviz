@@ -57,7 +57,10 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
     }
 
     private void setRecyclerView() {
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        int columnSize = 2;
+        if (getResources().getString(R.string.layout_type).equals("tablet"))
+            columnSize = 3;
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
         mAdapter = new RecyclerViewAdapter(getActivity(), MovizApp.sortType);
         mAdapter.setCallback(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -71,8 +74,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
         } else if (requestCode.equals(AppCodes.CODE_TITLE_TOP_RATED)) {
             getActivity().setTitle("Top Rated");
             Utils.saveToSharedPreferences(AppCodes.PREF_SORT_TYPE, AppCodes.PREF_SORT_TOP_RATED);
-        }
-        else if (requestCode.equals(AppCodes.CODE_ENABLE_PROGRESS_BAR))
+        } else if (requestCode.equals(AppCodes.CODE_ENABLE_PROGRESS_BAR))
             mProgressView.setVisibility(View.VISIBLE);
         else if (requestCode.equals(AppCodes.CODE_DISABLE_PROGRESS_BAR))
             mProgressView.setVisibility(View.GONE);
