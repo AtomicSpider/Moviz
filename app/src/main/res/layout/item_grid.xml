@@ -28,7 +28,7 @@
             android:paddingRight="7dp"
             android:paddingTop="5dp"
             android:singleLine="true"
-            android:text="Movie Title"
+            android:text=""
             android:textStyle="bold"
             android:textSize="14sp" />
     </LinearLayout>

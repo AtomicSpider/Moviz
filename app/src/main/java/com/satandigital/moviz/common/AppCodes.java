@@ -6,6 +6,8 @@ package com.satandigital.moviz.common;
  */
 public class AppCodes {
 
+    public static final String prefName = "MOVIZ_PREF";
+
     public static final String PREF_SORT_TYPE = "com.satandigital.moviz.PREF_SORT_TYPE";
     public static final String PREF_SORT_POPULAR = "popular";
     public static final String PREF_SORT_TOP_RATED = "top_rated";

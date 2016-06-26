@@ -1,6 +1,7 @@
 package com.satandigital.moviz.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,9 @@ import butterknife.ButterKnife;
  * Project : Moviz
  * Created by Sanat Dutta on 6/15/2016.
  */
-public class DetailsFragment extends android.support.v4.app.Fragment {
+public class DetailsFragment extends Fragment {
 
-    private String TAG = DetailsFragment.class.getSimpleName();
+    private final String TAG = DetailsFragment.class.getSimpleName();
 
     //Views
     @BindView(R.id.poster) ImageView posterIV;

@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private String TAG = RecyclerViewAdapter.class.getSimpleName();
+    private final String TAG = RecyclerViewAdapter.class.getSimpleName();
 
     private Context mContext;
     private AdapterCallback mCallback;

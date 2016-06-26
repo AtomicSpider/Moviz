@@ -13,7 +13,7 @@ import com.satandigital.moviz.fragments.DetailsFragment;
  */
 public class DetailsActivity extends AppCompatActivity {
 
-    private String TAG = DetailsActivity.class.getSimpleName();
+    private final String TAG = DetailsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
     private void attachFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new DetailsFragment())
+                    .add(R.id.movie_details_container, new DetailsFragment())
                     .commit();
         }
     }
