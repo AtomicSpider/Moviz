@@ -19,6 +19,9 @@
     <color name="black6">#666</color>
     <color name="black9">#999</color>
 
+    <color name="fab_color">#FE498C</color>
+    <color name="adult">#FE4445</color>
+
     <color name="red_50">#FFEBEE</color>
     <color name="red_100">#FFCDD2</color>
     <color name="red_200">#EF9A9A</color>

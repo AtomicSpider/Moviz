@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".activities.DetailsActivity"
-            android:theme="@style/mAppTheme">
+            android:theme="@style/mDetailsTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />

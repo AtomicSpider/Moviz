@@ -24,16 +24,24 @@ public class DetailsFragment extends Fragment {
     private final String TAG = DetailsFragment.class.getSimpleName();
 
     //Views
-    @BindView(R.id.poster) ImageView posterIV;
-    @BindView(R.id.original_title) TextView titleTv;
-    @BindView(R.id.release_date) TextView releaseDateTv;
-    @BindView(R.id.vote_average) TextView ratingTv;
-    @BindView(R.id.genre) TextView genreTv;
-    @BindView(R.id.overview) TextView overviewTv;
+    @BindView(R.id.backdrop)
+    ImageView backdropIV;
+    @BindView(R.id.original_title)
+    TextView originalTitleTv;
+    @BindView(R.id.vote_average)
+    TextView voteAverageTv;
+    @BindView(R.id.adult)
+    TextView adultTv;
+    @BindView(R.id.release_date)
+    TextView releaseDateTv;
+    @BindView(R.id.genre)
+    TextView genreTv;
+    @BindView(R.id.overview)
+    TextView overviewTv;
 
     //Data
     MovieObject movieObject;
-    private String TMDB_BASE_POSTER_PATH;
+    private String TMDB_BASE_BACKDROP_POSTER_PATH;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,17 +49,18 @@ public class DetailsFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         movieObject = getActivity().getIntent().getParcelableExtra("data");
-        TMDB_BASE_POSTER_PATH = getActivity().getResources().getString(R.string.TMDB_BASE_POSTER_PATH);
+        TMDB_BASE_BACKDROP_POSTER_PATH = getActivity().getResources().getString(R.string.TMDB_BASE_BACKDROP_POSTER_PATH);
         setData();
 
         return rootView;
     }
 
     private void setData() {
-        Picasso.with(getActivity()).load(TMDB_BASE_POSTER_PATH + movieObject.getPoster_path()).placeholder(R.drawable.placeholder_poster).error(R.drawable.placeholder_error_poster).into(posterIV);
-        titleTv.setText(movieObject.getOriginal_title());
-        releaseDateTv.setText("(" + movieObject.getRelease_date() + ")");
-        ratingTv.setText(String.valueOf(movieObject.getVote_average()));
+        Picasso.with(getActivity()).load(TMDB_BASE_BACKDROP_POSTER_PATH + movieObject.getBackdrop_path()).placeholder(R.drawable.placeholder_backdrop_poster).error(R.drawable.placeholder_backdrop_error_poster).into(backdropIV);
+        originalTitleTv.setText(movieObject.getOriginal_title());
+        voteAverageTv.setText(String.valueOf(movieObject.getVote_average()));
+        if (movieObject.isAdult()) adultTv.setVisibility(View.VISIBLE);
+        releaseDateTv.setText(movieObject.getRelease_date());
         genreTv.setText(getGenre(movieObject.getGenre_ids()));
         overviewTv.setText(movieObject.getOverview());
     }

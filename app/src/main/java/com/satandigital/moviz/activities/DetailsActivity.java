@@ -20,14 +20,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        setUpActionBar();
         attachFragment(savedInstanceState);
-    }
-
-    private void setUpActionBar() {
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void attachFragment(Bundle savedInstanceState) {
@@ -36,18 +29,5 @@ public class DetailsActivity extends AppCompatActivity {
                     .add(R.id.movie_details_container, new DetailsFragment())
                     .commit();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
