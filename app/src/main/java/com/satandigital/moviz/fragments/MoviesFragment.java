@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
  * Project : Moviz
  * Created by Sanat Dutta on 6/26/2016.
  */
+//ToDo recover objects when destroyed
 public class MoviesFragment extends Fragment implements AdapterCallback {
 
     private String TAG = MoviesFragment.class.getSimpleName();
@@ -58,7 +59,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
 
     private void setRecyclerView() {
         int columnSize = 2;
-        if (getResources().getString(R.string.layout_type).equals("tablet"))
+        if (getResources().getString(R.string.grid_size).equals("3"))
             columnSize = 3;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
         mAdapter = new RecyclerViewAdapter(getActivity(), MovizApp.sortType);

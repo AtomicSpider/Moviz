@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_type">mobile</string>
+    <string name="grid_size">2</string>
 </resources>
