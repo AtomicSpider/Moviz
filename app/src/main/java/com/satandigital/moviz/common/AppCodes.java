@@ -17,8 +17,13 @@ public class AppCodes {
     public static final String CODE_TITLE_POPULAR = "CODE_TITLE_POPULAR";
     public static final String CODE_FETCH_NEXT_PAGE = "CODE_FETCH_NEXT_PAGE";
 
+    //MoviesListFragment
     public static final String KEY_MOVIE_OBJECTS = "KEY_MOVIE_OBJECTS";
     public static final String KEY_MOVIE_LIST_TYPE = "KEY_MOVIE_LIST_TYPE";
     public static final String KEY_CURRENT_PAGE = "KEY_CURRENT_PAGE";
     public static final String KEY_LIST_POSITION = "KEY_LIST_POSITION";
+
+    //DetailsFragment
+    public static final String KEY_MOVIE_OBJECT = "KEY_MOVIE_OBJECT";
+    public static final String KEY_VIDEO_OBJECTS = "KEY_VIDEO_OBJECTS";
 }

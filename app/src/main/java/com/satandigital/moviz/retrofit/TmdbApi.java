@@ -1,9 +1,11 @@
 package com.satandigital.moviz.retrofit;
 
-import com.satandigital.moviz.models.TmdbRawObject;
+import com.satandigital.moviz.models.TmdbRawMoviesObject;
+import com.satandigital.moviz.models.TmdbRawVideosObject;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -13,11 +15,16 @@ import retrofit2.http.Query;
 public class TmdbApi {
     public interface PopularMovies {
         @GET("movie/popular")
-        Call<TmdbRawObject> getPopularMovies(@Query("page") Integer page);
+        Call<TmdbRawMoviesObject> getPopularMovies(@Query("page") Integer page);
     }
 
     public interface TopRatedMovies {
         @GET("movie/top_rated")
-        Call<TmdbRawObject> getTopRatedMovies(@Query("page") Integer page);
+        Call<TmdbRawMoviesObject> getTopRatedMovies(@Query("page") Integer page);
+    }
+
+    public interface MovieVideos {
+        @GET("movie/{id}/videos")
+        Call<TmdbRawVideosObject> getMovieVideos(@Path("id") Integer id);
     }
 }

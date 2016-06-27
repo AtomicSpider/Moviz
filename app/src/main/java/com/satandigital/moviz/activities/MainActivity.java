@@ -1,21 +1,12 @@
 package com.satandigital.moviz.activities;
 
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.common.AppCodes;
-import com.satandigital.moviz.models.MovieObject;
-import com.satandigital.moviz.models.TmdbRawObject;
-import com.satandigital.moviz.retrofit.TmdbClient;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Project : Moviz

@@ -2,7 +2,6 @@ package com.satandigital.moviz.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.fragments.DetailsFragment;

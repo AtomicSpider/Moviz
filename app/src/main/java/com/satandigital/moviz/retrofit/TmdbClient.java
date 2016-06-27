@@ -24,6 +24,7 @@ public class TmdbClient  {
 
     private TmdbApi.PopularMovies popularMovies;
     private TmdbApi.TopRatedMovies topRatedMovies;
+    private TmdbApi.MovieVideos movieVideos;
 
     private Retrofit mRetrofit;
     private static TmdbClient mTmdbClient = null;
@@ -53,6 +54,13 @@ public class TmdbClient  {
             topRatedMovies = mRetrofit.create(TmdbApi.TopRatedMovies.class);
         }
         return topRatedMovies;
+    }
+
+    public TmdbApi.MovieVideos getMovieVideosClient() {
+        if (movieVideos == null) {
+            movieVideos = mRetrofit.create(TmdbApi.MovieVideos.class);
+        }
+        return movieVideos;
     }
 
     private void initializeRetrofit() {

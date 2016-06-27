@@ -2,9 +2,6 @@ package com.satandigital.moviz.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,26 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.satandigital.moviz.BuildConfig;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.DetailsActivity;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.models.MovieObject;
-import com.satandigital.moviz.models.TMDBPageObject;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -41,9 +25,9 @@ import butterknife.ButterKnife;
  * Project : Moviz
  * Created by Sanat Dutta on 6/14/2016.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
 
-    private final String TAG = RecyclerViewAdapter.class.getSimpleName();
+    private final String TAG = MoviesRecyclerViewAdapter.class.getSimpleName();
 
     private Context mContext;
     private AdapterCallback mCallback;
@@ -54,7 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private String TMDB_BASE_POSTER_PATH;
     private int listPosition =0;
 
-    public RecyclerViewAdapter(Context context) {
+    public MoviesRecyclerViewAdapter(Context context) {
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         this.movieObjects = new ArrayList<>();
@@ -63,7 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public interface AdapterCallback {
-        void AdapterCallbackRequest(String requestCode, int nextPage);
+        void AdapterCallbackRequest(String requestCode);
     }
 
     public void setCallback(AdapterCallback callback) {
@@ -94,14 +78,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        //ToDo Pagination
-        /*if (position == movieObjects.size() - 1) {
+        if (position == movieObjects.size() - 1) {
             Log.i(TAG, "Reached final card");
-            if (!isProcessOngoing) {
-                Log.i(TAG, "Requesting more Data");
-                new FetchMoviesTask(mContext).execute(sortType, Integer.toString(page + 1));
-            }
-        }*/
+            mCallback.AdapterCallbackRequest(AppCodes.CODE_FETCH_NEXT_PAGE);
+        }
     }
 
     @Override

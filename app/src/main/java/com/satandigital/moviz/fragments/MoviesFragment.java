@@ -1,7 +1,6 @@
 package com.satandigital.moviz.fragments;
 
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,12 +17,12 @@ import android.widget.Toast;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.adapters.MoviesRecyclerViewAdapter;
+import com.satandigital.moviz.adapters.MoviesRecyclerViewAdapter.AdapterCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
-import com.satandigital.moviz.adapters.RecyclerViewAdapter;
-import com.satandigital.moviz.adapters.RecyclerViewAdapter.AdapterCallback;
 import com.satandigital.moviz.models.MovieObject;
-import com.satandigital.moviz.models.TmdbRawObject;
+import com.satandigital.moviz.models.TmdbRawMoviesObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
 
 import java.util.ArrayList;
@@ -38,12 +37,11 @@ import retrofit2.Response;
  * Project : Moviz
  * Created by Sanat Dutta on 6/26/2016.
  */
-//ToDo recover objects when destroyed
 public class MoviesFragment extends Fragment implements AdapterCallback {
 
     private String TAG = MoviesFragment.class.getSimpleName();
 
-    private RecyclerViewAdapter mAdapter;
+    private MoviesRecyclerViewAdapter mAdapter;
 
     //Views
     @BindView(R.id.recycler_view)
@@ -78,7 +76,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
         if (getResources().getString(R.string.grid_size).equals("3"))
             columnSize = 3;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
-        mAdapter = new RecyclerViewAdapter(getActivity());
+        mAdapter = new MoviesRecyclerViewAdapter(getActivity());
         mAdapter.setCallback(this);
         mRecyclerView.setAdapter(mAdapter);
         movieListType = MovizApp.movieListType;
@@ -95,9 +93,9 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
     }
 
     @Override
-    public void AdapterCallbackRequest(String requestCode, int nextPage) {
+    public void AdapterCallbackRequest(String requestCode) {
         if (requestCode.equals(AppCodes.CODE_FETCH_NEXT_PAGE))
-            fetchMovies(nextPage, movieListType);
+            fetchMovies(currentPage + 1, movieListType);
     }
 
     private void fetchMovies(int nextPage, final String mListType) {
@@ -105,7 +103,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
         isFetchOngoing = true;
         toggleProgressBar(true);
 
-        Call<TmdbRawObject> call = null;
+        Call<TmdbRawMoviesObject> call = null;
         if (mListType.equals(AppCodes.PREF_MOVIE_LIST_POPULAR)) {
             call = TmdbClient.getInstance(getActivity())
                     .getPopularMoviesClient()
@@ -115,9 +113,9 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
                     .getTopRatedMoviesClient()
                     .getTopRatedMovies(nextPage);
         }
-        Callback<TmdbRawObject> callback = new Callback<TmdbRawObject>() {
+        Callback<TmdbRawMoviesObject> callback = new Callback<TmdbRawMoviesObject>() {
             @Override
-            public void onResponse(Call<TmdbRawObject> call, Response<TmdbRawObject> response) {
+            public void onResponse(Call<TmdbRawMoviesObject> call, Response<TmdbRawMoviesObject> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "Retrofit Response Successful");
 
@@ -130,8 +128,8 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
                             getActivity().setTitle("Top Rated");
                             Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, AppCodes.PREF_MOVIE_LIST_TOP_RATED);
                         }
-                        mAdapter.clearAllAndPopulate(response.body().getMovies());
-                    } else mAdapter.addItemsAndPopulate(response.body().getMovies());
+                        mAdapter.clearAllAndPopulate(response.body().getResults());
+                    } else mAdapter.addItemsAndPopulate(response.body().getResults());
                 } else {
                     Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Retrofit Response Failure" + response.message());
@@ -140,7 +138,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
             }
 
             @Override
-            public void onFailure(Call<TmdbRawObject> call, Throwable t) {
+            public void onFailure(Call<TmdbRawMoviesObject> call, Throwable t) {
                 Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Retrofit Failure" + t.getMessage());
                 fetchEnded();
