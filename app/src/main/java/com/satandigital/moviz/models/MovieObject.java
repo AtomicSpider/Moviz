@@ -3,25 +3,69 @@ package com.satandigital.moviz.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Project : Moviz
  * Created by Sanat Dutta on 6/14/2016.
  */
 public class MovieObject implements Parcelable {
 
+    @Expose
+    @SerializedName("poster_path")
     private String poster_path;
+
+    @Expose
+    @SerializedName("adult")
     private boolean adult;
+
+    @Expose
+    @SerializedName("overview")
     private String overview;
+
+    @Expose
+    @SerializedName("release_date")
     private String release_date;
+
+    @Expose
+    @SerializedName("genre_ids")
     private int[] genre_ids;
+
+    @Expose
+    @SerializedName("id")
     private int id;
+
+    @Expose
+    @SerializedName("original_title")
     private String original_title;
+
+    @Expose
+    @SerializedName("original_language")
     private String original_language;
+
+    @Expose
+    @SerializedName("title")
     private String title;
+
+    @Expose
+    @SerializedName("backdrop_path")
     private String backdrop_path;
+
+    @Expose
+    @SerializedName("popularity")
     private double popularity;
+
+    @Expose
+    @SerializedName("vote_count")
     private int vote_count;
+
+    @Expose
+    @SerializedName("video")
     private boolean video;
+
+    @Expose
+    @SerializedName("vote_average")
     private double vote_average;
 
     public MovieObject() {

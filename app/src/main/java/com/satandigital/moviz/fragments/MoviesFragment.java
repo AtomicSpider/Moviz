@@ -17,8 +17,8 @@ import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
-import com.satandigital.moviz.models.RecyclerViewAdapter;
-import com.satandigital.moviz.models.RecyclerViewAdapter.AdapterCallback;
+import com.satandigital.moviz.adapters.RecyclerViewAdapter;
+import com.satandigital.moviz.adapters.RecyclerViewAdapter.AdapterCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

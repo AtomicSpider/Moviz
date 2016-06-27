@@ -1,4 +1,4 @@
-package com.satandigital.moviz.models;
+package com.satandigital.moviz.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import com.satandigital.moviz.BuildConfig;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.DetailsActivity;
 import com.satandigital.moviz.common.AppCodes;
+import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.TMDBPageObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
