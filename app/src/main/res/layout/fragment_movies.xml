@@ -21,7 +21,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cpv_animAutostart="true"
         app:cpv_color="@color/colorPrimary"
         app:cpv_indeterminate="true" />

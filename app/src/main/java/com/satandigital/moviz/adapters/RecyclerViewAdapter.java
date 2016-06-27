@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //Data
     private ArrayList<MovieObject> movieObjects;
     private String TMDB_BASE_POSTER_PATH;
+    private int listPosition =0;
 
     public RecyclerViewAdapter(Context context) {
         this.mContext = context;
@@ -77,6 +79,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "" + position);
+        listPosition = position;
 
         Picasso.with(mContext).load(TMDB_BASE_POSTER_PATH + movieObjects.get(position).getPoster_path()).placeholder(R.drawable.placeholder_poster).error(R.drawable.placeholder_error_poster).into(holder.movie_poster_iv);
         holder.movie_title_tv.setText(movieObjects.get(position).getOriginal_title());
@@ -128,5 +131,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void addItemsAndPopulate(ArrayList<MovieObject> movies) {
         movieObjects.addAll(movies);
         notifyDataSetChanged();
+    }
+
+    public ArrayList<MovieObject> getMovieObjects() {
+        return movieObjects;
+    }
+
+    public int getListPosition() {
+        return listPosition;
     }
 }

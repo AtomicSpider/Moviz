@@ -1,6 +1,7 @@
 package com.satandigital.moviz.fragments;
 
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -67,12 +68,12 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
 
         ButterKnife.bind(this, rootView);
-        setRecyclerView();
+        setRecyclerView(savedInstanceState);
 
         return rootView;
     }
 
-    private void setRecyclerView() {
+    private void setRecyclerView(Bundle savedInstanceState) {
         int columnSize = 2;
         if (getResources().getString(R.string.grid_size).equals("3"))
             columnSize = 3;
@@ -81,7 +82,16 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
         mAdapter.setCallback(this);
         mRecyclerView.setAdapter(mAdapter);
         movieListType = MovizApp.movieListType;
-        fetchMovies(1, movieListType);
+        if (savedInstanceState == null) fetchMovies(1, movieListType);
+        else {
+            currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
+            movieListType = savedInstanceState.getString(AppCodes.KEY_MOVIE_LIST_TYPE);
+            ArrayList<MovieObject> movieObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_MOVIE_OBJECTS);
+            if (movieObjects != null) {
+                mAdapter.clearAllAndPopulate(movieObjects);
+                mRecyclerView.scrollToPosition(savedInstanceState.getInt(AppCodes.KEY_LIST_POSITION));
+            }
+        }
     }
 
     @Override
@@ -91,6 +101,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
     }
 
     private void fetchMovies(int nextPage, final String mListType) {
+        Log.i(TAG, "Fetch movies, Page: " + nextPage + " ListType: " + mListType);
         isFetchOngoing = true;
         toggleProgressBar(true);
 
@@ -178,5 +189,14 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
     private void toggleProgressBar(boolean visible) {
         if (visible) mProgressView.setVisibility(View.VISIBLE);
         else mProgressView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(AppCodes.KEY_MOVIE_OBJECTS, mAdapter.getMovieObjects());
+        outState.putInt(AppCodes.KEY_LIST_POSITION, mAdapter.getListPosition());
+        outState.putString(AppCodes.KEY_MOVIE_LIST_TYPE, movieListType);
+        outState.putInt(AppCodes.KEY_CURRENT_PAGE, currentPage);
     }
 }
