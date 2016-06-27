@@ -34,40 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
         setupActionBar();
         setContentView(R.layout.activity_main);
-
-        testRetrofit();
-    }
-
-    private void testRetrofit() {
-        Call<TmdbRawObject> call = TmdbClient.getInstance(MainActivity.this)
-                .getPopularMoviesImpl()
-                .getPopularMovies(1);
-        Callback<TmdbRawObject> callback = new Callback<TmdbRawObject>() {
-            @Override
-            public void onResponse(Call<TmdbRawObject> call, Response<TmdbRawObject> response) {
-                if (!response.isSuccessful()) {
-                    return;
-                }
-
-                Log.d("TAG", "Oh yeah: "+response.body().getPage());
-                MovieObject movieObject = response.body().getMovies().get(0);
-                Log.d("TAG", "Movie: "+movieObject.getOriginal_title());
-
-            }
-
-            @Override
-            public void onFailure(Call<TmdbRawObject> call, Throwable t) {
-                Log.d("TAG", "Oh fuck");
-            }
-        };
-        call.enqueue(callback);
     }
 
     private void setupActionBar() {
         mActionBar = getSupportActionBar();
-        if (MovizApp.sortType.equals(AppCodes.CODE_TITLE_POPULAR))
+        if (MovizApp.movieListType.equals(AppCodes.CODE_TITLE_POPULAR))
             mActionBar.setTitle("Popular");
-        else if (MovizApp.sortType.equals(AppCodes.CODE_TITLE_TOP_RATED))
+        else if (MovizApp.movieListType.equals(AppCodes.CODE_TITLE_TOP_RATED))
             mActionBar.setTitle("Top Rated");
     }
 }

@@ -41,14 +41,14 @@ public class TmdbClient  {
         return mTmdbClient;
     }
 
-    public TmdbApi.PopularMovies getPopularMoviesImpl() {
+    public TmdbApi.PopularMovies getPopularMoviesClient() {
         if (popularMovies == null) {
             popularMovies = mRetrofit.create(TmdbApi.PopularMovies.class);
         }
         return popularMovies;
     }
 
-    public TmdbApi.TopRatedMovies getTopRatedMoviesImpl() {
+    public TmdbApi.TopRatedMovies getTopRatedMoviesClient() {
         if (topRatedMovies == null) {
             topRatedMovies = mRetrofit.create(TmdbApi.TopRatedMovies.class);
         }

@@ -16,14 +16,14 @@ public class MovizApp extends Application {
     private String TAG = MovizApp.class.getSimpleName();
 
     public static SharedPreferences mSharedPreferences;
-    public static String sortType;
+    public static String movieListType;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         mSharedPreferences = getSharedPreferences(AppCodes.prefName, Context.MODE_PRIVATE);
-        sortType = Utils.readSharedPreferences(AppCodes.PREF_SORT_TYPE, AppCodes.PREF_SORT_POPULAR);
+        movieListType = Utils.readSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, AppCodes.PREF_MOVIE_LIST_POPULAR);
 
     }
 }
