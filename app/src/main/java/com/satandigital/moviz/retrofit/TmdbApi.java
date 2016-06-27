@@ -1,6 +1,7 @@
 package com.satandigital.moviz.retrofit;
 
 import com.satandigital.moviz.models.TmdbRawMoviesObject;
+import com.satandigital.moviz.models.TmdbRawReviewObject;
 import com.satandigital.moviz.models.TmdbRawVideosObject;
 
 import retrofit2.Call;
@@ -26,5 +27,10 @@ public class TmdbApi {
     public interface MovieVideos {
         @GET("movie/{id}/videos")
         Call<TmdbRawVideosObject> getMovieVideos(@Path("id") Integer id);
+    }
+
+    public interface MovieReviews {
+        @GET("movie/{id}/reviews")
+        Call<TmdbRawReviewObject> getMovieReviews(@Path("id") Integer id, @Query("page") Integer page);
     }
 }

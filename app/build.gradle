@@ -41,7 +41,6 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
     compile 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
-    compile 'com.ms-square:expandableTextView:0.1.4'
 
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'

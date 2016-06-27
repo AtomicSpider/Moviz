@@ -26,4 +26,5 @@ public class AppCodes {
     //DetailsFragment
     public static final String KEY_MOVIE_OBJECT = "KEY_MOVIE_OBJECT";
     public static final String KEY_VIDEO_OBJECTS = "KEY_VIDEO_OBJECTS";
+    public static final String KEY_REVIEW_OBJECTS = "KEY_REVIEW_OBJECTS";
 }

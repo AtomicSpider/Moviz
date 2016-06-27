@@ -11,14 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.adapters.VideosRecyclerViewAdapter;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
+import com.satandigital.moviz.models.ExpandableTextView;
 import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.ReviewObject;
+import com.satandigital.moviz.models.TmdbRawReviewObject;
 import com.satandigital.moviz.models.TmdbRawVideosObject;
 import com.satandigital.moviz.models.VideoObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
@@ -36,8 +39,6 @@ import retrofit2.Response;
  * Project : Moviz
  * Created by Sanat Dutta on 6/15/2016.
  */
-
-//ToDo Retain instance
 public class DetailsFragment extends Fragment {
 
     private final String TAG = DetailsFragment.class.getSimpleName();
@@ -59,12 +60,29 @@ public class DetailsFragment extends Fragment {
     TextView genreTv;
     @BindView(R.id.overview)
     ExpandableTextView overviewTv;
+    @BindView(R.id.videosLL)
+    LinearLayout videosLL;
     @BindView(R.id.videos_recycler_view)
     RecyclerView videosRv;
+    @BindView(R.id.reviewsLL)
+    LinearLayout reviewsLL;
+    @BindView(R.id.review1LL)
+    LinearLayout review1LL;
+    @BindView(R.id.review1_author)
+    TextView review1_author;
+    @BindView(R.id.review1_content)
+    ExpandableTextView review1_content;
+    @BindView(R.id.review2LL)
+    LinearLayout review2LL;
+    @BindView(R.id.review2_author)
+    TextView review2_author;
+    @BindView(R.id.review2_content)
+    ExpandableTextView review2_content;
 
     //Data
     MovieObject movieObject;
     ArrayList<VideoObject> mVideoObjects;
+    ArrayList<ReviewObject> mReviewObjects;
     private String TMDB_BASE_BACKDROP_POSTER_PATH;
 
     @Override
@@ -74,9 +92,10 @@ public class DetailsFragment extends Fragment {
 
         //Max height for tablet mode
         if (getResources().getString(R.string.orientation).equals("landscape"))
-        backdropIV.setMaxHeight(getDeviceHeight()/2);
+            backdropIV.setMaxHeight(getDeviceHeight() / 2);
 
         mVideoObjects = new ArrayList<>();
+        mReviewObjects = new ArrayList<>();
         TMDB_BASE_BACKDROP_POSTER_PATH = getActivity().getResources().getString(R.string.TMDB_BASE_BACKDROP_POSTER_PATH);
 
         setVideosRecyclerView();
@@ -84,11 +103,13 @@ public class DetailsFragment extends Fragment {
         if (savedInstanceState == null) {
             movieObject = getActivity().getIntent().getParcelableExtra("data");
             getVideos(movieObject.getId());
-        }
-        else {
+            getReviews(movieObject.getId());
+        } else {
             movieObject = savedInstanceState.getParcelable(AppCodes.KEY_MOVIE_OBJECT);
             mVideoObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_VIDEO_OBJECTS);
-            mAdapter.clearAllAndPopulate(mVideoObjects);
+            mReviewObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS);
+            populateWithVideos(mVideoObjects);
+            populateWithReviews(mReviewObjects);
         }
         decorateView();
 
@@ -112,8 +133,8 @@ public class DetailsFragment extends Fragment {
 
     private void getVideos(int id) {
         Call<TmdbRawVideosObject> call = TmdbClient.getInstance(getActivity())
-                    .getMovieVideosClient()
-                    .getMovieVideos(id);
+                .getMovieVideosClient()
+                .getMovieVideos(id);
 
         Callback<TmdbRawVideosObject> callback = new Callback<TmdbRawVideosObject>() {
             @Override
@@ -121,7 +142,7 @@ public class DetailsFragment extends Fragment {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "Retrofit Videos Response Successful");
                     mVideoObjects = response.body().getResults();
-                    mAdapter.clearAllAndPopulate(mVideoObjects);
+                    populateWithVideos(mVideoObjects);
                 } else
                     Log.e(TAG, "Retrofit Videos Response Failure" + response.message());
             }
@@ -134,11 +155,57 @@ public class DetailsFragment extends Fragment {
         call.enqueue(callback);
     }
 
+    private void populateWithVideos(ArrayList<VideoObject> mVideoObjects) {
+        if (mVideoObjects.size() > 0) {
+            videosLL.setVisibility(View.VISIBLE);
+            mAdapter.clearAllAndPopulate(mVideoObjects);
+        }
+    }
+
+    private void getReviews(int id) {
+        Call<TmdbRawReviewObject> call = TmdbClient.getInstance(getActivity())
+                .getMovieReviewsClient()
+                .getMovieReviews(id, 1);
+
+        Callback<TmdbRawReviewObject> callback = new Callback<TmdbRawReviewObject>() {
+            @Override
+            public void onResponse(Call<TmdbRawReviewObject> call, Response<TmdbRawReviewObject> response) {
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "Retrofit Reviews Response Successful");
+                    mReviewObjects = response.body().getResults();
+                    populateWithReviews(mReviewObjects);
+                } else
+                    Log.e(TAG, "Retrofit Reviews Response Failure" + response.message());
+            }
+
+            @Override
+            public void onFailure(Call<TmdbRawReviewObject> call, Throwable t) {
+                Log.e(TAG, "Retrofit Reviews Failure" + t.getMessage());
+            }
+        };
+        call.enqueue(callback);
+    }
+
+    private void populateWithReviews(ArrayList<ReviewObject> mReviewObjects) {
+        if (mReviewObjects.size() > 0) {
+            reviewsLL.setVisibility(View.VISIBLE);
+            review1LL.setVisibility(View.VISIBLE);
+            review1_author.setText(mReviewObjects.get(0).getAuthor());
+            review1_content.setText(mReviewObjects.get(0).getContent());
+        }
+        if (mReviewObjects.size() > 1) {
+            review2LL.setVisibility(View.VISIBLE);
+            review2_author.setText(mReviewObjects.get(1).getAuthor());
+            review2_content.setText(mReviewObjects.get(1).getContent());
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(AppCodes.KEY_MOVIE_OBJECT, movieObject);
         outState.putParcelableArrayList(AppCodes.KEY_VIDEO_OBJECTS, mVideoObjects);
+        outState.putParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS, mReviewObjects);
     }
 
     private int getDeviceHeight() {
