@@ -11,6 +11,7 @@ import com.satandigital.moviz.R;
 import com.satandigital.moviz.adapters.ReviewsRecyclerViewAdapter;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.ReviewObject;
 import com.satandigital.moviz.models.TmdbRawReviewObject;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class ReviewsActivity extends AppCompatActivity implements ReviewsRecycle
 
     //Data
     private String original_title;
-    private TmdbRawReviewObject mTmdbRawReviewObject;
+    private ArrayList<ReviewObject> mReviewObjects;
     private boolean paging = false;
 
     @Override
@@ -45,21 +46,29 @@ public class ReviewsActivity extends AppCompatActivity implements ReviewsRecycle
         setContentView(R.layout.activity_reviews);
         ButterKnife.bind(this);
 
-        original_title = getIntent().getStringExtra(AppCodes.KEY_MOVIE_NAME);
+        setUpRecyclerView();
+
+        if (savedInstanceState == null){
+            original_title = getIntent().getStringExtra(AppCodes.KEY_MOVIE_NAME);
+            TmdbRawReviewObject mTmdbRawReviewObject = getIntent().getParcelableExtra(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT);
+            mReviewObjects = mTmdbRawReviewObject.getResults();
+            paging = mTmdbRawReviewObject.getTotal_pages() > 1;
+        }else {
+
+        }
+
         getSupportActionBar().setTitle(original_title);
-        mTmdbRawReviewObject = getIntent().getParcelableExtra(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT);
-        if (mTmdbRawReviewObject.getTotal_pages() > 1) paging = true;
-        setRecyclerView(savedInstanceState);
+        populateRecyclerView();
     }
 
-    private void setRecyclerView(Bundle savedInstanceState) {
+    private void setUpRecyclerView() {
         mAdapter = new ReviewsRecyclerViewAdapter(ReviewsActivity.this);
         mAdapter.setCallback(ReviewsActivity.this);
         mRecyclerView.setAdapter(mAdapter);
-        if (savedInstanceState == null)
-            mAdapter.clearAllAndPopulate(mTmdbRawReviewObject.getResults());
-        else {
-        }
+    }
+
+    private void populateRecyclerView() {
+        mAdapter.clearAllAndPopulate(mReviewObjects);
     }
 
     @Override
