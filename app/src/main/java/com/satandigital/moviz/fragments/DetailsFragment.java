@@ -1,5 +1,6 @@
 package com.satandigital.moviz.fragments;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.activities.ReviewsActivity;
 import com.satandigital.moviz.adapters.VideosRecyclerViewAdapter;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
@@ -78,11 +80,13 @@ public class DetailsFragment extends Fragment {
     TextView review2_author;
     @BindView(R.id.review2_content)
     ExpandableTextView review2_content;
+    @BindView(R.id.read_all_reviews)
+    TextView read_all_reviews;
 
     //Data
     MovieObject movieObject;
     ArrayList<VideoObject> mVideoObjects;
-    ArrayList<ReviewObject> mReviewObjects;
+    TmdbRawReviewObject mTmdbRawReviewObject;
     private String TMDB_BASE_BACKDROP_POSTER_PATH;
 
     @Override
@@ -95,7 +99,6 @@ public class DetailsFragment extends Fragment {
             backdropIV.setMaxHeight(getDeviceHeight() / 2);
 
         mVideoObjects = new ArrayList<>();
-        mReviewObjects = new ArrayList<>();
         TMDB_BASE_BACKDROP_POSTER_PATH = getActivity().getResources().getString(R.string.TMDB_BASE_BACKDROP_POSTER_PATH);
 
         setVideosRecyclerView();
@@ -107,9 +110,9 @@ public class DetailsFragment extends Fragment {
         } else {
             movieObject = savedInstanceState.getParcelable(AppCodes.KEY_MOVIE_OBJECT);
             mVideoObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_VIDEO_OBJECTS);
-            mReviewObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS);
+            mTmdbRawReviewObject = savedInstanceState.getParcelable(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT);
             populateWithVideos(mVideoObjects);
-            populateWithReviews(mReviewObjects);
+            populateWithReviews(mTmdbRawReviewObject.getResults());
         }
         decorateView();
 
@@ -172,8 +175,8 @@ public class DetailsFragment extends Fragment {
             public void onResponse(Call<TmdbRawReviewObject> call, Response<TmdbRawReviewObject> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "Retrofit Reviews Response Successful");
-                    mReviewObjects = response.body().getResults();
-                    populateWithReviews(mReviewObjects);
+                    mTmdbRawReviewObject = response.body();
+                    populateWithReviews(mTmdbRawReviewObject.getResults());
                 } else
                     Log.e(TAG, "Retrofit Reviews Response Failure" + response.message());
             }
@@ -198,6 +201,18 @@ public class DetailsFragment extends Fragment {
             review2_author.setText(mReviewObjects.get(1).getAuthor());
             review2_content.setText(mReviewObjects.get(1).getContent());
         }
+        if (mReviewObjects.size() > 2) {
+            read_all_reviews.setVisibility(View.VISIBLE);
+            read_all_reviews.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent mIntent = new Intent(getActivity(), ReviewsActivity.class);
+                    mIntent.putExtra(AppCodes.KEY_MOVIE_NAME, movieObject.getOriginal_title());
+                    mIntent.putExtra(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT, mTmdbRawReviewObject);
+                    startActivity(mIntent);
+                }
+            });
+        }
     }
 
     @Override
@@ -205,7 +220,7 @@ public class DetailsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(AppCodes.KEY_MOVIE_OBJECT, movieObject);
         outState.putParcelableArrayList(AppCodes.KEY_VIDEO_OBJECTS, mVideoObjects);
-        outState.putParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS, mReviewObjects);
+        outState.putParcelable(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT, mTmdbRawReviewObject);
     }
 
     private int getDeviceHeight() {

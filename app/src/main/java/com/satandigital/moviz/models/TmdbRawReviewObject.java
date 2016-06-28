@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Project : Moviz
  * Created by Sanat Dutta on 6/27/2016.
  */
-public class TmdbRawReviewObject{
+public class TmdbRawReviewObject implements Parcelable {
 
     @Expose
     @SerializedName("page")
@@ -61,4 +61,39 @@ public class TmdbRawReviewObject{
     public void setTotal_results(int total_results) {
         this.total_results = total_results;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.page);
+        dest.writeTypedList(this.results);
+        dest.writeInt(this.total_pages);
+        dest.writeInt(this.total_results);
+    }
+
+    public TmdbRawReviewObject() {
+    }
+
+    protected TmdbRawReviewObject(Parcel in) {
+        this.page = in.readInt();
+        this.results = in.createTypedArrayList(ReviewObject.CREATOR);
+        this.total_pages = in.readInt();
+        this.total_results = in.readInt();
+    }
+
+    public static final Parcelable.Creator<TmdbRawReviewObject> CREATOR = new Parcelable.Creator<TmdbRawReviewObject>() {
+        @Override
+        public TmdbRawReviewObject createFromParcel(Parcel source) {
+            return new TmdbRawReviewObject(source);
+        }
+
+        @Override
+        public TmdbRawReviewObject[] newArray(int size) {
+            return new TmdbRawReviewObject[size];
+        }
+    };
 }
