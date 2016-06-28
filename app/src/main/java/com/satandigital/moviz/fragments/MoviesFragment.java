@@ -66,20 +66,9 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
 
         ButterKnife.bind(this, rootView);
-        setRecyclerView(savedInstanceState);
 
-        return rootView;
-    }
+        setRecyclerView();
 
-    private void setRecyclerView(Bundle savedInstanceState) {
-        int columnSize = 2;
-        if (getResources().getString(R.string.grid_size).equals("3"))
-            columnSize = 3;
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
-        mAdapter = new MoviesRecyclerViewAdapter(getActivity());
-        mAdapter.setCallback(this);
-        mRecyclerView.setAdapter(mAdapter);
-        movieListType = MovizApp.movieListType;
         if (savedInstanceState == null) fetchMovies(1, movieListType);
         else {
             currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
@@ -90,6 +79,19 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
                 mRecyclerView.scrollToPosition(savedInstanceState.getInt(AppCodes.KEY_LIST_POSITION));
             }
         }
+
+        return rootView;
+    }
+
+    private void setRecyclerView() {
+        int columnSize = 2;
+        if (getResources().getString(R.string.grid_size).equals("3"))
+            columnSize = 3;
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
+        mAdapter = new MoviesRecyclerViewAdapter(getActivity());
+        mAdapter.setCallback(this);
+        mRecyclerView.setAdapter(mAdapter);
+        movieListType = MovizApp.movieListType;
     }
 
     @Override
