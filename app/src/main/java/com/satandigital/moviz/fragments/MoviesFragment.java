@@ -84,9 +84,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
     }
 
     private void setRecyclerView() {
-        int columnSize = 2;
-        if (getResources().getString(R.string.grid_size).equals("3"))
-            columnSize = 3;
+        int columnSize = Integer.parseInt(getResources().getString(R.string.grid_size));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
         mAdapter = new MoviesRecyclerViewAdapter(getActivity());
         mAdapter.setCallback(this);
