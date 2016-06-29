@@ -79,7 +79,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         });
 
         if (position == movieObjects.size() - 1) {
-            Log.i(TAG, "Reached final card");
+            Log.i(TAG, "Reached final movie");
             mCallback.AdapterCallbackRequest(AppCodes.CODE_FETCH_NEXT_PAGE);
         }
     }

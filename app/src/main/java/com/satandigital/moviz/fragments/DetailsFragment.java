@@ -207,7 +207,8 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent mIntent = new Intent(getActivity(), ReviewsActivity.class);
-                    mIntent.putExtra(AppCodes.KEY_MOVIE_NAME, movieObject.getOriginal_title());
+                    mIntent.putExtra(AppCodes.KEY_MOVIE_TITLE, movieObject.getOriginal_title());
+                    mIntent.putExtra(AppCodes.KEY_MOVIE_ID, movieObject.getId());
                     mIntent.putExtra(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT, mTmdbRawReviewObject);
                     startActivity(mIntent);
                 }

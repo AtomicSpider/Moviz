@@ -52,7 +52,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
     //Data
     private boolean isFetchOngoing = false;
     private String movieListType;
-    private int currentPage = 0;
+    private int currentPage = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
 
     @Override
     public void AdapterCallbackRequest(String requestCode) {
-        if (requestCode.equals(AppCodes.CODE_FETCH_NEXT_PAGE))
+        if (requestCode.equals(AppCodes.CODE_FETCH_NEXT_PAGE) && !isFetchOngoing)
             fetchMovies(currentPage + 1, movieListType);
     }
 

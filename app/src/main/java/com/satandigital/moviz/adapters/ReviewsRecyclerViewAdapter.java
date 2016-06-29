@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.models.ExpandableTextView;
 import com.satandigital.moviz.models.ReviewObject;
 import com.satandigital.moviz.models.VideoObject;
@@ -37,6 +38,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
     //Data
     private ArrayList<ReviewObject> mReviewObjects;
     private int listPosition = 0;
+    private boolean paging = false;
 
     public ReviewsRecyclerViewAdapter(Context context) {
         this.mContext = context;
@@ -63,6 +65,11 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
         listPosition = position;
         holder.review_author.setText(mReviewObjects.get(position).getAuthor());
         holder.review_content.setText(mReviewObjects.get(position).getContent());
+
+        if ((position == mReviewObjects.size() - 1)&& paging) {
+            Log.i(TAG, "Reached final card");
+            mCallback.AdapterCallbackRequest(AppCodes.CODE_FETCH_NEXT_PAGE);
+        }
     }
 
     @Override
@@ -100,5 +107,9 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
 
     public int getListPosition() {
         return listPosition;
+    }
+
+    public void setPaging(boolean paging) {
+        this.paging = paging;
     }
 }
