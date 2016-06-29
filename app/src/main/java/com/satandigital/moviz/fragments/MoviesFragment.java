@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.activities.MainActivity;
 import com.satandigital.moviz.adapters.MoviesRecyclerViewAdapter;
 import com.satandigital.moviz.adapters.MoviesRecyclerViewAdapter.AdapterCallback;
 import com.satandigital.moviz.common.AppCodes;
@@ -37,7 +38,8 @@ import retrofit2.Response;
  * Project : Moviz
  * Created by Sanat Dutta on 6/26/2016.
  */
-public class MoviesFragment extends Fragment implements AdapterCallback {
+//ToDo remove toggle
+public class MoviesFragment extends Fragment implements AdapterCallback, MainActivity.MainActivityCallback {
 
     private String TAG = MoviesFragment.class.getSimpleName();
 
@@ -68,6 +70,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
         ButterKnife.bind(this, rootView);
 
         setRecyclerView();
+        MainActivity.setCallback(this);
 
         if (savedInstanceState == null) fetchMovies(1, movieListType);
         else {
@@ -84,7 +87,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
     }
 
     private void setRecyclerView() {
-        int columnSize = Integer.parseInt(getResources().getString(R.string.grid_size));
+        int columnSize = getResources().getInteger(R.integer.grid_size);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
         mAdapter = new MoviesRecyclerViewAdapter(getActivity());
         mAdapter.setCallback(this);
@@ -98,9 +101,15 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
             fetchMovies(currentPage + 1, movieListType);
     }
 
+    @Override
+    public void MainActivityCallbackRequest(String type) {
+        fetchMovies(1, type);
+    }
+
     private void fetchMovies(int nextPage, final String mListType) {
         Log.i(TAG, "Fetch movies, Page: " + nextPage + " ListType: " + mListType);
         isFetchOngoing = true;
+        MainActivity.disableSpinner();
         toggleProgressBar(true);
 
         Call<TmdbRawMoviesObject> call = null;
@@ -147,6 +156,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback {
             private void fetchEnded() {
                 isFetchOngoing = false;
                 toggleProgressBar(false);
+                MainActivity.enableSpinner();
             }
         };
         call.enqueue(callback);

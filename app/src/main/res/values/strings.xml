@@ -13,4 +13,11 @@
     <string name="TMDB_BASE_URL">http://api.themoviedb.org/3/</string>
     <string name="YOUTUBE_THUMBNAIL_URL">http://img.youtube.com/vi/<xliff:g id="youtube_video_key">%1$s</xliff:g>/mqdefault.jpg</string>
     <string name="YOUTUBE_VIDEO_URL">https://www.youtube.com/watch?v=<xliff:g id="youtube_video_key">%1$s</xliff:g></string>
+
+    <!-- Toolbar Spinner -->
+    <string-array name="spinner_items">
+        <item>Popular</item>
+        <item>Top Rated</item>
+        <item>Favorites</item>
+    </string-array>
 </resources>

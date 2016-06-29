@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="grid_size">4</string>
+    <integer name="grid_size">4</integer>
     <string name="orientation">landscape</string>
+    <dimen name="action_bar_spinner_item_text_size">18sp</dimen>
 </resources>
