@@ -1,13 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:baselineAligned="false"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:weightSum="2">
+    android:orientation="vertical">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
+
+        <Spinner
+            android:id="@+id/spinner_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:dropDownWidth="150dp"
+            android:theme="@style/ActionbarSpinnerTheme" />
+    </android.support.v7.widget.Toolbar>
+
+    <fragment
         android:id="@+id/fragment_movies"
         android:name="com.satandigital.moviz.fragments.MoviesFragment"
         android:layout_width="0dp"
@@ -21,5 +32,4 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
-
 </LinearLayout>

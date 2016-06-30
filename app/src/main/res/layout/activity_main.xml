@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,7 +18,7 @@
             android:theme="@style/ActionbarSpinnerTheme" />
     </android.support.v7.widget.Toolbar>
 
-    <fragment xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:id="@+id/fragment_movies"
         android:name="com.satandigital.moviz.fragments.MoviesFragment"
         android:layout_width="match_parent"

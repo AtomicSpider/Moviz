@@ -57,7 +57,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="15dp"
-                android:text="Zootopia"
                 android:textColor="@color/blue_grey_700"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -78,7 +77,6 @@
                     android:drawablePadding="7dp"
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center_vertical"
-                    android:text="7.47"
                     android:textColor="@color/blue_grey_700"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -117,7 +115,6 @@
                     android:id="@+id/release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2016-02-11"
                     android:textColor="@color/blue_700"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -129,7 +126,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Family | Drama | Thriller"
                 android:textColor="@color/blue_800"
                 android:textSize="14sp" />
 
@@ -296,8 +292,8 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_large"
-        android:backgroundTint="@color/fab_color"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/fab_disabled_color"
         android:clickable="true"
         android:src="@drawable/ic_heart_24_4"
         app:borderWidth="0dp"
