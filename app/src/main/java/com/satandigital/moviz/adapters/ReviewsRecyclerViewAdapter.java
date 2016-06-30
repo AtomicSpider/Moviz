@@ -1,22 +1,18 @@
 package com.satandigital.moviz.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.models.ExpandableTextView;
 import com.satandigital.moviz.models.ReviewObject;
-import com.satandigital.moviz.models.VideoObject;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -32,7 +28,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
     private final String TAG = ReviewsRecyclerViewAdapter.class.getSimpleName();
 
     private Context mContext;
-    private AdapterCallback mCallback;
+    private MovizCallback mCallback;
     private LayoutInflater mLayoutInflater;
 
     //Data
@@ -46,11 +42,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
         this.mReviewObjects = new ArrayList<>();
     }
 
-    public interface AdapterCallback {
-        void AdapterCallbackRequest(String requestCode);
-    }
-
-    public void setCallback(AdapterCallback callback) {
+    public void setCallback(MovizCallback callback) {
         this.mCallback = callback;
     }
 
@@ -68,7 +60,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
 
         if ((position == mReviewObjects.size() - 1)&& paging) {
             Log.i(TAG, "Reached final card");
-            mCallback.AdapterCallbackRequest(AppCodes.CODE_FETCH_NEXT_PAGE);
+            mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE, null);
         }
     }
 

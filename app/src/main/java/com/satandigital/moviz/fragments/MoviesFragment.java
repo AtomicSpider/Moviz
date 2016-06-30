@@ -1,6 +1,5 @@
 package com.satandigital.moviz.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,9 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -20,7 +16,6 @@ import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.MainActivity;
 import com.satandigital.moviz.adapters.MoviesRecyclerViewAdapter;
-import com.satandigital.moviz.adapters.MoviesRecyclerViewAdapter.AdapterCallback;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
@@ -40,7 +35,7 @@ import retrofit2.Response;
  * Project : Moviz
  * Created by Sanat Dutta on 6/26/2016.
  */
-public class MoviesFragment extends Fragment implements AdapterCallback, MovizCallback {
+public class MoviesFragment extends Fragment implements MovizCallback {
 
     private String TAG = MoviesFragment.class.getSimpleName();
 
@@ -102,11 +97,7 @@ public class MoviesFragment extends Fragment implements AdapterCallback, MovizCa
             movieListType = data;
             fetchMovies(1, movieListType);
         }
-    }
-
-    @Override
-    public void AdapterCallbackRequest(String requestCode) {
-        if (requestCode.equals(AppCodes.CODE_FETCH_NEXT_PAGE) && !isFetchOngoing)
+        else if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchMovies(currentPage + 1, movieListType);
     }
 

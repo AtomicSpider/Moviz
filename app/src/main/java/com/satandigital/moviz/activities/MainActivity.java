@@ -1,8 +1,6 @@
 package com.satandigital.moviz.activities;
 
-import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,7 +14,6 @@ import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
-import com.satandigital.moviz.fragments.MoviesFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

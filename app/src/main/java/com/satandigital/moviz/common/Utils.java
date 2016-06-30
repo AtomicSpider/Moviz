@@ -1,10 +1,6 @@
 package com.satandigital.moviz.common;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.util.DisplayMetrics;
-import android.view.Display;
 
 import com.satandigital.moviz.MovizApp;
 

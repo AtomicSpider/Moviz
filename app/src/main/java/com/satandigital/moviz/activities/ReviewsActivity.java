@@ -1,19 +1,16 @@
 package com.satandigital.moviz.activities;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.adapters.ReviewsRecyclerViewAdapter;
+import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
-import com.satandigital.moviz.models.MovieObject;
 import com.satandigital.moviz.models.ReviewObject;
 import com.satandigital.moviz.models.TmdbRawReviewObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
@@ -30,7 +27,7 @@ import retrofit2.Response;
  * Project : Moviz
  * Created by Sanat Dutta on 6/28/2016.
  */
-public class ReviewsActivity extends AppCompatActivity implements ReviewsRecyclerViewAdapter.AdapterCallback {
+public class ReviewsActivity extends AppCompatActivity implements MovizCallback {
 
     private final String TAG = ReviewsActivity.class.getSimpleName();
 
@@ -81,7 +78,7 @@ public class ReviewsActivity extends AppCompatActivity implements ReviewsRecycle
 
     private void setUpRecyclerView() {
         mAdapter = new ReviewsRecyclerViewAdapter(ReviewsActivity.this);
-        mAdapter.setCallback(ReviewsActivity.this);
+        mAdapter.setCallback(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -91,8 +88,8 @@ public class ReviewsActivity extends AppCompatActivity implements ReviewsRecycle
     }
 
     @Override
-    public void AdapterCallbackRequest(String requestCode) {
-        if (requestCode.equals(AppCodes.CODE_FETCH_NEXT_PAGE) && !isFetchOngoing)
+    public void CallbackRequest(String request, String data) {
+        if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchReviews(currentPage + 1, movie_id);
     }
 

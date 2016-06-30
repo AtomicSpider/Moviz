@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.DetailsActivity;
+import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.models.MovieObject;
 import com.squareup.picasso.Picasso;
@@ -30,7 +31,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     private final String TAG = MoviesRecyclerViewAdapter.class.getSimpleName();
 
     private Context mContext;
-    private AdapterCallback mCallback;
+    private MovizCallback mCallback;
     private LayoutInflater mLayoutInflater;
 
     //Data
@@ -46,11 +47,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         TMDB_BASE_POSTER_PATH = mContext.getResources().getString(R.string.TMDB_BASE_POSTER_PATH);
     }
 
-    public interface AdapterCallback {
-        void AdapterCallbackRequest(String requestCode);
-    }
-
-    public void setCallback(AdapterCallback callback) {
+    public void setCallback(MovizCallback callback) {
         this.mCallback = callback;
     }
 
@@ -80,7 +77,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
         if (position == movieObjects.size() - 1) {
             Log.i(TAG, "Reached final movie");
-            mCallback.AdapterCallbackRequest(AppCodes.CODE_FETCH_NEXT_PAGE);
+            mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE, null);
         }
     }
 

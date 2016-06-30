@@ -18,10 +18,6 @@ public class AppCodes {
     public static final String CALLBACK_FETCH_MOVIES_WITH_PAGE = "CALLBACK_FETCH_MOVIES_WITH_PAGE";
     public static final String CALLBACK_TOGGLE_SPINNER = "CALLBACK_TOGGLE_SPINNER";
 
-    public static final String CODE_TITLE_TOP_RATED = "CODE_TITLE_TOP_RATED";
-    public static final String CODE_TITLE_POPULAR = "CODE_TITLE_POPULAR";
-    public static final String CODE_FETCH_NEXT_PAGE = "CODE_FETCH_NEXT_PAGE";
-
     //MoviesListFragment
     public static final String KEY_MOVIE_OBJECTS = "KEY_MOVIE_OBJECTS";
     public static final String KEY_MOVIE_LIST_TYPE = "KEY_MOVIE_LIST_TYPE";

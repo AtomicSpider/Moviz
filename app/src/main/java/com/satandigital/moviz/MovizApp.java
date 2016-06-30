@@ -26,6 +26,5 @@ public class MovizApp extends Application {
         mSharedPreferences = getSharedPreferences(AppCodes.prefName, Context.MODE_PRIVATE);
         movieListType = Utils.readSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, AppCodes.PREF_MOVIE_LIST_POPULAR);
         Log.i(TAG, "Pref: " + movieListType);
-
     }
 }
