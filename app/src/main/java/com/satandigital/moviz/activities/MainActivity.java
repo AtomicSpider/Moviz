@@ -1,9 +1,12 @@
 package com.satandigital.moviz.activities;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,6 +14,7 @@ import android.widget.Spinner;
 
 import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.fragments.MoviesFragment;
 
@@ -21,17 +25,20 @@ import butterknife.ButterKnife;
  * Project : Moviz
  * Created by Sanat Dutta on 6/14/2016.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovizCallback {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
-    public static MainActivityCallback mCallback;
+    public static MovizCallback mCallback;
 
     //Views
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.spinner_toolbar)
+    Spinner spinner_toolbar;
 
-    public static Spinner spinner_toolbar;
+    //Data
+    private boolean isSpinnerTouched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +47,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        setUpSpinner();
         setUpToolbar();
+        setUpSpinner();
+    }
+
+    private void setUpToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     private void setUpSpinner() {
@@ -51,16 +63,34 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_toolbar.setAdapter(adapter);
 
+        if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_POPULAR))
+            spinner_toolbar.setSelection(0);
+        else if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_TOP_RATED))
+            spinner_toolbar.setSelection(1);
+
+        spinner_toolbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                isSpinnerTouched = true;
+                return false;
+            }
+        });
+
         spinner_toolbar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i) {
-                    case 0:
-                        mCallback.MainActivityCallbackRequest(AppCodes.PREF_MOVIE_LIST_POPULAR);
-                        break;
-                    case 1:
-                        mCallback.MainActivityCallbackRequest(AppCodes.PREF_MOVIE_LIST_TOP_RATED);
-                        break;
+                if (isSpinnerTouched) {
+                    isSpinnerTouched = false;
+                    switch (i) {
+                        case 0:
+                            Log.i(TAG, "Popular selected");
+                            mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_TYPE, AppCodes.PREF_MOVIE_LIST_POPULAR);
+                            break;
+                        case 1:
+                            Log.i(TAG, "Top Rated selected");
+                            mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_TYPE, AppCodes.PREF_MOVIE_LIST_TOP_RATED);
+                            break;
+                    }
                 }
             }
 
@@ -71,31 +101,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        if (MovizApp.movieListType.equals(AppCodes.CODE_TITLE_POPULAR))
-            spinner_toolbar.setSelection(0);
-        else if (MovizApp.movieListType.equals(AppCodes.CODE_TITLE_TOP_RATED))
-            spinner_toolbar.setSelection(1);
-    }
-
-    public static void disableSpinner() {
-        if (spinner_toolbar != null)
-            spinner_toolbar.setEnabled(false);
-    }
-
-    public static void enableSpinner() {
-        if (spinner_toolbar != null)
-            spinner_toolbar.setEnabled(true);
-    }
-
-    public interface MainActivityCallback {
-        void MainActivityCallbackRequest(String type);
-    }
-
-    public static void setCallback(MainActivityCallback callback) {
+    public static void setCallback(MovizCallback callback) {
         mCallback = callback;
+    }
+
+    @Override
+    public void CallbackRequest(String request, String data) {
+        if (request.equals(AppCodes.CALLBACK_TOGGLE_SPINNER)) {
+            if (data.equals("ENABLE")) spinner_toolbar.setEnabled(true);
+            else if (data.equals("DISABLE")) spinner_toolbar.setEnabled(false);
+        }
     }
 }

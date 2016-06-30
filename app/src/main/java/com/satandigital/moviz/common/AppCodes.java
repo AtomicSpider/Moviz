@@ -13,6 +13,11 @@ public class AppCodes {
     public static final String PREF_MOVIE_LIST_POPULAR = "popular";
     public static final String PREF_MOVIE_LIST_TOP_RATED = "top_rated";
 
+    //Callbacks
+    public static final String CALLBACK_FETCH_MOVIES_WITH_TYPE = "CALLBACK_FETCH_MOVIES_WITH_TYPE";
+    public static final String CALLBACK_FETCH_MOVIES_WITH_PAGE = "CALLBACK_FETCH_MOVIES_WITH_PAGE";
+    public static final String CALLBACK_TOGGLE_SPINNER = "CALLBACK_TOGGLE_SPINNER";
+
     public static final String CODE_TITLE_TOP_RATED = "CODE_TITLE_TOP_RATED";
     public static final String CODE_TITLE_POPULAR = "CODE_TITLE_POPULAR";
     public static final String CODE_FETCH_NEXT_PAGE = "CODE_FETCH_NEXT_PAGE";
