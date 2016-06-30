@@ -18,18 +18,26 @@
             android:theme="@style/ActionbarSpinnerTheme" />
     </android.support.v7.widget.Toolbar>
 
-    <fragment
-        android:id="@+id/fragment_movies"
-        android:name="com.satandigital.moviz.fragments.MoviesFragment"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:context=".fragments.MoviesFragment"
-        tools:layout="@layout/fragment_movies" />
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-    <FrameLayout
-        android:id="@+id/movie_details_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        <fragment
+            android:id="@+id/fragment_movies"
+            android:name="com.satandigital.moviz.fragments.MoviesFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:context=".fragments.MoviesFragment"
+            tools:layout="@layout/fragment_movies" />
+
+        <FrameLayout
+            android:id="@+id/movie_details_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>
