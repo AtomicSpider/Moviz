@@ -78,6 +78,8 @@ public class MoviesFragment extends Fragment implements MovizCallback {
             currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
             movieListType = savedInstanceState.getString(AppCodes.KEY_MOVIE_LIST_TYPE);
             ArrayList<MovieObject> movieObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_MOVIE_OBJECTS);
+            if (movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) mAdapter.setPaging(false);
+            else mAdapter.setPaging(true);
             mAdapter.clearAllAndPopulate(movieObjects);
             mRecyclerView.scrollToPosition(savedInstanceState.getInt(AppCodes.KEY_LIST_POSITION));
         }
@@ -111,9 +113,13 @@ public class MoviesFragment extends Fragment implements MovizCallback {
         if (movieObjects != null && movieObjects.size() > 0) {
             Log.i(TAG, "Saving Pref as: " + movieListType);
             Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
+            mAdapter.setPaging(false);
             mAdapter.clearAllAndPopulate(movieObjects);
-        } else
+        } else {
+            mAdapter.setPaging(false);
+            mAdapter.clearAllAndPopulate(new ArrayList<MovieObject>());
             Toast.makeText(getActivity(), "No movies added to Favorites", Toast.LENGTH_SHORT).show();
+        }
 
         isFetchOngoing = false;
         toggleProgressBar(false);
@@ -144,6 +150,7 @@ public class MoviesFragment extends Fragment implements MovizCallback {
                         Log.i(TAG, "Retrofit Response Successful");
 
                         currentPage = response.body().getPage();
+                        mAdapter.setPaging(true);
                         if (currentPage == 1) {
                             Log.i(TAG, "Saving Pref as: " + movieListType);
                             Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);

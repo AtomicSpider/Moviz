@@ -33,6 +33,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     private Context mContext;
     private MovizCallback mCallback;
     private LayoutInflater mLayoutInflater;
+    private boolean paging = true;
 
     //Data
     private ArrayList<MovieObject> movieObjects;
@@ -75,7 +76,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
             }
         });
 
-        if (position == movieObjects.size() - 1) {
+        if (position == movieObjects.size() - 1 && paging) {
             Log.i(TAG, "Reached final movie");
             mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE, "");
         }
@@ -116,5 +117,9 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     public int getListPosition() {
         return listPosition;
+    }
+
+    public void setPaging(boolean b) {
+        paging = b;
     }
 }
