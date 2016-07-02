@@ -2,6 +2,7 @@ package com.satandigital.moviz.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -12,10 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.ReviewsActivity;
 import com.satandigital.moviz.adapters.VideosRecyclerViewAdapter;
+import com.satandigital.moviz.asynctasks.DatabaseTask;
+import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
 import com.satandigital.moviz.models.ExpandableTextView;
@@ -29,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -39,15 +44,18 @@ import retrofit2.Response;
  * Project : Moviz
  * Created by Sanat Dutta on 6/15/2016.
  */
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment implements MovizCallback {
 
     private final String TAG = DetailsFragment.class.getSimpleName();
 
     private VideosRecyclerViewAdapter mAdapter;
+    private MovizCallback movizCallback = this;
 
     //Views
     @BindView(R.id.backdrop)
     ImageView backdropIV;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     @BindView(R.id.original_title)
     TextView originalTitleTv;
     @BindView(R.id.vote_average)
@@ -82,25 +90,39 @@ public class DetailsFragment extends Fragment {
     TextView read_all_reviews;
 
     //Data
-    MovieObject movieObject;
-    ArrayList<VideoObject> mVideoObjects;
-    TmdbRawReviewObject mTmdbRawReviewObject;
-    private String TMDB_BASE_BACKDROP_POSTER_PATH;
+    @BindString(R.string.TMDB_BASE_BACKDROP_POSTER_PATH)
+    String TMDB_BASE_BACKDROP_POSTER_PATH;
+
+    private MovieObject movieObject;
+    private ArrayList<VideoObject> mVideoObjects = new ArrayList<>();
+    private TmdbRawReviewObject mTmdbRawReviewObject;
+    private boolean isFavorite = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, rootView);
 
-        //Max height for tablet mode
+        //Max height for landscape mode
         if (getResources().getString(R.string.orientation).equals("landscape"))
             backdropIV.setMaxHeight(getDeviceHeight() / 2);
 
-        mVideoObjects = new ArrayList<>();
-        TMDB_BASE_BACKDROP_POSTER_PATH = getActivity().getResources().getString(R.string.TMDB_BASE_BACKDROP_POSTER_PATH);
-
         setVideosRecyclerView();
+        getData(savedInstanceState);
+        setUpFab();
+        decorateView();
 
+        new DatabaseTask(this, getActivity(), null).execute(AppCodes.TASK_IS_FAVORITE, String.valueOf(movieObject.getId()));
+
+        return rootView;
+    }
+
+    private void setVideosRecyclerView() {
+        mAdapter = new VideosRecyclerViewAdapter(getActivity());
+        videosRv.setAdapter(mAdapter);
+    }
+
+    private void getData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             movieObject = getActivity().getIntent().getParcelableExtra("data");
             getVideos(movieObject.getId());
@@ -112,9 +134,47 @@ public class DetailsFragment extends Fragment {
             populateWithVideos(mVideoObjects);
             populateWithReviews(mTmdbRawReviewObject.getResults());
         }
-        decorateView();
+    }
 
-        return rootView;
+    private void setUpFab() {
+//        Uri uri = MoviesContract.MoviesEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieObject.getId())).build();
+//        Log.d(TAG, "start query: " + uri);
+//        Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
+//
+//        if (c != null) {
+//            Log.d(TAG, "end: success: " + c.getCount());
+//
+//            while (c.moveToNext()) {
+//                Log.d(TAG, "" +
+//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry._ID)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POSTER_PATH)) + " " +
+//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_ADULT)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_OVERVIEW)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_GENRE_IDS)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_ORIGINAL_TITLE)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_ORIGINAL_LANGUAGE)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE)) + " " +
+//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_BACKDROP_PATH)) + " " +
+//                        c.getDouble(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POPULARITY)) + " " +
+//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_VOTE_COUNT)) + " " +
+//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_VIDEO)) + " " +
+//                        c.getDouble(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE))
+//                );
+//            }
+//            c.close();
+//        } else Log.d(TAG, "end: fail");
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFavorite) {
+                    new DatabaseTask(movizCallback, getActivity(), null).execute(AppCodes.TASK_DELETE_FAVORITE, String.valueOf(movieObject.getId()));
+                } else {
+                    new DatabaseTask(movizCallback, getActivity(), movieObject).execute(AppCodes.TASK_ADD_FAVORITE, null);
+                }
+            }
+        });
     }
 
     private void decorateView() {
@@ -125,11 +185,6 @@ public class DetailsFragment extends Fragment {
         releaseDateTv.setText(movieObject.getRelease_date());
         genreTv.setText(Utils.getGenre(movieObject.getGenre_ids()));
         overviewTv.setText(movieObject.getOverview());
-    }
-
-    private void setVideosRecyclerView() {
-        mAdapter = new VideosRecyclerViewAdapter(getActivity());
-        videosRv.setAdapter(mAdapter);
     }
 
     private void getVideos(int id) {
@@ -226,5 +281,45 @@ public class DetailsFragment extends Fragment {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         return displaymetrics.heightPixels;
+    }
+
+    @Override
+    public void CallbackRequest(String request, String data) {
+        switch (request) {
+            case AppCodes.CALLBACK_IS_FAVORITE:
+                if (data.equals("true")) {
+                    Log.d(TAG, "Movie is in Favorites");
+                    isFavorite = true;
+                    fab.setImageResource(R.drawable.ic_heart_24_4);
+                } else if (data.equals("false")) {
+                    isFavorite = false;
+                    Log.d(TAG, "Movie is not in Favorites");
+                }
+                break;
+            case AppCodes.CALLBACK_DELETE_FAVORITE:
+                if (data.equals("true")) {
+                    Log.d(TAG, "Movie deleted from Favorites");
+                    isFavorite = false;
+                    fab.setImageResource(R.drawable.ic_heart_disabled_24_4);
+                    Toast.makeText(getActivity(), "Removed from favorites", Toast.LENGTH_SHORT).show();
+                } else if (data.equals("false")) {
+                    Log.d(TAG, "Movie could not be deleted from Favorites");
+                    isFavorite = true;
+                    fab.setImageResource(R.drawable.ic_heart_24_4);
+                }
+                break;
+            case AppCodes.CALLBACK_ADD_FAVORITE:
+                if (data.equals("true")) {
+                    Log.d(TAG, "Movie added to Favorites");
+                    isFavorite = true;
+                    fab.setImageResource(R.drawable.ic_heart_24_4);
+                    Toast.makeText(getActivity(), "Added to favorites", Toast.LENGTH_SHORT).show();
+                } else if (data.equals("false")) {
+                    Log.d(TAG, "Movie could not be added to Favorites");
+                    isFavorite = false;
+                    fab.setImageResource(R.drawable.ic_heart_disabled_24_4);
+                }
+                break;
+        }
     }
 }

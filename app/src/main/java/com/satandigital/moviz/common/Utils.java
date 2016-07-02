@@ -1,8 +1,11 @@
 package com.satandigital.moviz.common;
 
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 
 import com.satandigital.moviz.MovizApp;
+import com.satandigital.moviz.database.MoviesContract;
+import com.satandigital.moviz.models.MovieObject;
 
 /**
  * Project : Moviz
@@ -77,5 +80,36 @@ public class Utils {
             if (i != genre_ids.length - 1) genre += " | ";
         }
         return genre;
+    }
+
+    public static ContentValues getContentValues(MovieObject movieObject) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_POSTER_PATH, movieObject.getPoster_path());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_ADULT, movieObject.isAdult() ? 1 : 0);
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_OVERVIEW, movieObject.getOverview());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE, movieObject.getRelease_date());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_GENRE_IDS, getGenreString(movieObject.getGenre_ids()));
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_ID, movieObject.getId());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_ORIGINAL_TITLE, movieObject.getOriginal_title());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_ORIGINAL_LANGUAGE, movieObject.getOriginal_language());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_TITLE, movieObject.getTitle());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_BACKDROP_PATH, movieObject.getBackdrop_path());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_POPULARITY, movieObject.getPopularity());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_VOTE_COUNT, movieObject.getVote_count());
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_VIDEO, movieObject.isVideo() ? 1 : 0);
+        contentValues.put(MoviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE, movieObject.getVote_average());
+
+        return contentValues;
+    }
+
+    public static String getGenreString(int[] genre_ids) {
+        String genreIdsStr = "";
+
+        for (int i = 0; i < genre_ids.length; i++) {
+            genreIdsStr += String.valueOf(genre_ids[i]);
+            if (i != genre_ids.length - 1) genreIdsStr += ",";
+        }
+
+        return genreIdsStr;
     }
 }

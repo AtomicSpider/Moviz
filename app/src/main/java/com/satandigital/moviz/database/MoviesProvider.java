@@ -6,7 +6,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 /**
@@ -38,7 +37,6 @@ public class MoviesProvider extends ContentProvider {
         return true;
     }
 
-    @Nullable
     @Override
     public String getType(Uri uri) {
 
@@ -54,7 +52,6 @@ public class MoviesProvider extends ContentProvider {
         }
     }
 
-    @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCursor;
@@ -63,7 +60,7 @@ public class MoviesProvider extends ContentProvider {
                 retCursor = moviesDbHelper.getReadableDatabase().query(
                         MoviesContract.MoviesEntry.TABLE_NAME,
                         projection,
-                        MoviesContract.MoviesEntry._ID + " = ?",
+                        MoviesContract.MoviesEntry.COLUMN_ID + " = ?",
                         new String[]{MoviesContract.MoviesEntry.getMovieIdFromUri(uri)},
                         null,
                         null,
@@ -89,7 +86,6 @@ public class MoviesProvider extends ContentProvider {
         return retCursor;
     }
 
-    @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         final SQLiteDatabase db = moviesDbHelper.getWritableDatabase();
@@ -122,7 +118,7 @@ public class MoviesProvider extends ContentProvider {
         switch (match) {
             case MOVIE:
                 rowsDeleted = db.delete(MoviesContract.MoviesEntry.TABLE_NAME,
-                        MoviesContract.MoviesEntry._ID + " = ?",
+                        MoviesContract.MoviesEntry.COLUMN_ID + " = ?",
                         new String[]{MoviesContract.MoviesEntry.getMovieIdFromUri(uri)});
                 break;
             default:

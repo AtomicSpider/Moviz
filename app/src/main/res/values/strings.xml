@@ -2,7 +2,7 @@
     <string name="app_name">Moviz</string>
 
     <!-- Content Provider Related-->
-    <string name="provider">com.satandigital.moviz</string>
+    <string name="authority">com.satandigital.moviz</string>
 
     <!-- URLs -->
     <string name="TMDB_BASE_POSTER_PATH">http://image.tmdb.org/t/p/w185</string>

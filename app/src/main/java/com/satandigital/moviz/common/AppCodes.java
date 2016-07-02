@@ -18,6 +18,10 @@ public class AppCodes {
     public static final String CALLBACK_FETCH_MOVIES_WITH_PAGE = "CALLBACK_FETCH_MOVIES_WITH_PAGE";
     public static final String CALLBACK_TOGGLE_SPINNER = "CALLBACK_TOGGLE_SPINNER";
 
+    public static final String CALLBACK_IS_FAVORITE = "CALLBACK_IS_FAVORITE";
+    public static final String CALLBACK_DELETE_FAVORITE = "CALLBACK_DELETE_FAVORITE";
+    public static final String CALLBACK_ADD_FAVORITE = "CALLBACK_ADD_FAVORITE";
+
     //MoviesListFragment
     public static final String KEY_MOVIE_OBJECTS = "KEY_MOVIE_OBJECTS";
     public static final String KEY_MOVIE_LIST_TYPE = "KEY_MOVIE_LIST_TYPE";
@@ -32,4 +36,9 @@ public class AppCodes {
     public static final String KEY_TMDB_RAW_REVIEW_OBJECT = "KEY_TMDB_RAW_REVIEW_OBJECT";
     public static final String KEY_REVIEW_OBJECTS = "KEY_REVIEW_OBJECTS";
     public static final String KEY_REVIEW_PAGING = "KEY_REVIEW_PAGING";
+
+    //Database Related
+    public static final String TASK_IS_FAVORITE = "TASK_IS_FAVORITE";
+    public static final String TASK_DELETE_FAVORITE = "TASK_DELETE_FAVORITE";
+    public static final String TASK_ADD_FAVORITE = "TASK_ADD_FAVORITE";
 }

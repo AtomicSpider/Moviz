@@ -28,7 +28,7 @@ public class MoviesContract {
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_GENRE_IDS = "genre_ids";
-        //Store Movie Id in _id
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_ORIGINAL_TITLE = "original_title";
         public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
         public static final String COLUMN_TITLE = "title";

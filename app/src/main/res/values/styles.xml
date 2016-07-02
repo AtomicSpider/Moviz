@@ -12,6 +12,12 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="mDetailsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/fab_enabled_color</item>
+    </style>
+
     <style name="ActionbarSpinnerTheme" parent="Base.Widget.AppCompat.Spinner">
         <item name="colorAccent">@color/white</item>
         <item name="colorControlNormal">@color/white</item>

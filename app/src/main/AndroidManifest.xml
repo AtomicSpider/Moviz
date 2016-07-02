@@ -12,6 +12,11 @@
         android:label="@string/app_name"
         android:theme="@style/mAppTheme">
 
+        <provider
+            android:name=".database.MoviesProvider"
+            android:authorities="@string/authority"
+            android:exported="false" />
+
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/mAppThemeNoActionBar">
@@ -22,12 +27,10 @@
         </activity>
         <activity
             android:name=".activities.DetailsActivity"
-            android:theme="@style/mAppThemeNoActionBar">
-        </activity>
+            android:theme="@style/mDetailsTheme"/>
         <activity
             android:name=".activities.ReviewsActivity"
-            android:theme="@style/mAppTheme">
-        </activity>
+            android:theme="@style/mAppTheme"/>
     </application>
 
 </manifest>
