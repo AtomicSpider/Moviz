@@ -1,5 +1,6 @@
 package com.satandigital.moviz.activities;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,9 @@ import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
+import com.satandigital.moviz.models.MovieObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements MovizCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -60,10 +63,17 @@ public class MainActivity extends AppCompatActivity implements MovizCallback {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_toolbar.setAdapter(adapter);
 
-        if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_POPULAR))
-            spinner_toolbar.setSelection(0);
-        else if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_TOP_RATED))
-            spinner_toolbar.setSelection(1);
+        switch (MovizApp.movieListType) {
+            case AppCodes.PREF_MOVIE_LIST_POPULAR:
+                spinner_toolbar.setSelection(0);
+                break;
+            case AppCodes.PREF_MOVIE_LIST_TOP_RATED:
+                spinner_toolbar.setSelection(1);
+                break;
+            case AppCodes.PREF_MOVIE_LIST_FAVORITES:
+                spinner_toolbar.setSelection(2);
+                break;
+        }
 
         spinner_toolbar.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -87,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements MovizCallback {
                             Log.i(TAG, "Top Rated selected");
                             mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_TYPE, AppCodes.PREF_MOVIE_LIST_TOP_RATED);
                             break;
+                        case 2:
+                            Log.i(TAG, "Favorites selected");
+                            mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_TYPE, AppCodes.PREF_MOVIE_LIST_FAVORITES);
+                            break;
                     }
                 }
             }
@@ -108,5 +122,10 @@ public class MainActivity extends AppCompatActivity implements MovizCallback {
             if (data.equals("ENABLE")) spinner_toolbar.setEnabled(true);
             else if (data.equals("DISABLE")) spinner_toolbar.setEnabled(false);
         }
+    }
+
+    @Override
+    public void CallbackRequest(String request, ArrayList<MovieObject> movieObjects) {
+
     }
 }

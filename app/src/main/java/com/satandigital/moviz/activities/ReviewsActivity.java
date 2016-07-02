@@ -1,5 +1,6 @@
 package com.satandigital.moviz.activities;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import com.satandigital.moviz.R;
 import com.satandigital.moviz.adapters.ReviewsRecyclerViewAdapter;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
+import com.satandigital.moviz.models.MovieObject;
 import com.satandigital.moviz.models.ReviewObject;
 import com.satandigital.moviz.models.TmdbRawReviewObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
@@ -42,7 +44,6 @@ public class ReviewsActivity extends AppCompatActivity implements MovizCallback 
     //Data
     private String original_title;
     private int movie_id;
-    private ArrayList<ReviewObject> mReviewObjects;
     private boolean paging = false;
     private int currentPage = 1;
     private boolean isFetchOngoing = false;
@@ -53,25 +54,11 @@ public class ReviewsActivity extends AppCompatActivity implements MovizCallback 
         setContentView(R.layout.activity_reviews);
         ButterKnife.bind(this);
 
-        mReviewObjects = new ArrayList<>();
         setUpRecyclerView();
-
-        if (savedInstanceState == null) {
-            original_title = getIntent().getStringExtra(AppCodes.KEY_MOVIE_TITLE);
-            movie_id = getIntent().getIntExtra(AppCodes.KEY_MOVIE_ID, 0);
-            TmdbRawReviewObject mTmdbRawReviewObject = getIntent().getParcelableExtra(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT);
-            mReviewObjects = mTmdbRawReviewObject.getResults();
-            paging = mTmdbRawReviewObject.getTotal_pages() > currentPage;
-        } else {
-            original_title = savedInstanceState.getString(AppCodes.KEY_MOVIE_TITLE);
-            movie_id = savedInstanceState.getInt(AppCodes.KEY_MOVIE_ID);
-            mReviewObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS);
-            paging = savedInstanceState.getBoolean(AppCodes.KEY_REVIEW_PAGING);
-            currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
-        }
+        getData(savedInstanceState);
 
         getSupportActionBar().setTitle(original_title);
-        populateRecyclerView();
+
         if (savedInstanceState != null)
             mRecyclerView.scrollToPosition(savedInstanceState.getInt(AppCodes.KEY_LIST_POSITION));
     }
@@ -82,15 +69,40 @@ public class ReviewsActivity extends AppCompatActivity implements MovizCallback 
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void populateRecyclerView() {
+    private void getData(Bundle savedInstanceState) {
+        ArrayList<ReviewObject> reviewObjects;
+        if (savedInstanceState == null) {
+            original_title = getIntent().getStringExtra(AppCodes.KEY_MOVIE_TITLE);
+            movie_id = getIntent().getIntExtra(AppCodes.KEY_MOVIE_ID, 0);
+            TmdbRawReviewObject mTmdbRawReviewObject = getIntent().getParcelableExtra(AppCodes.KEY_TMDB_RAW_REVIEW_OBJECT);
+            reviewObjects = mTmdbRawReviewObject.getResults();
+            paging = mTmdbRawReviewObject.getTotal_pages() > currentPage;
+        } else {
+            original_title = savedInstanceState.getString(AppCodes.KEY_MOVIE_TITLE);
+            movie_id = savedInstanceState.getInt(AppCodes.KEY_MOVIE_ID);
+            reviewObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS);
+            paging = savedInstanceState.getBoolean(AppCodes.KEY_REVIEW_PAGING);
+            currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
+        }
+
+        populateRecyclerView(true, reviewObjects);
+    }
+
+    private void populateRecyclerView(boolean clear, ArrayList<ReviewObject> reviewObjects) {
         mAdapter.setPaging(paging);
-        mAdapter.clearAllAndPopulate(mReviewObjects);
+        if (clear) mAdapter.clearAllAndPopulate(reviewObjects);
+        else mAdapter.addItemsAndPopulate(reviewObjects);
     }
 
     @Override
     public void CallbackRequest(String request, String data) {
         if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchReviews(currentPage + 1, movie_id);
+    }
+
+    @Override
+    public void CallbackRequest(String request, ArrayList<MovieObject> movieObjects) {
+
     }
 
     private void fetchReviews(int nextPage, int id) {
@@ -109,8 +121,7 @@ public class ReviewsActivity extends AppCompatActivity implements MovizCallback 
                     Log.i(TAG, "Retrofit Reviews Response Successful");
                     currentPage = response.body().getPage();
                     paging = response.body().getTotal_pages() > currentPage;
-                    mReviewObjects.addAll(response.body().getResults());
-                    populateRecyclerView();
+                    populateRecyclerView(false, response.body().getResults());
                 } else
                     Log.e(TAG, "Retrofit Reviews Response Failure" + response.message());
                 fetchEnded();
@@ -141,7 +152,7 @@ public class ReviewsActivity extends AppCompatActivity implements MovizCallback 
 
         outState.putString(AppCodes.KEY_MOVIE_TITLE, original_title);
         outState.putInt(AppCodes.KEY_MOVIE_ID, movie_id);
-        outState.putParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS, mReviewObjects);
+        outState.putParcelableArrayList(AppCodes.KEY_REVIEW_OBJECTS, mAdapter.getReviewObjects());
         outState.putBoolean(AppCodes.KEY_REVIEW_PAGING, paging);
         outState.putInt(AppCodes.KEY_CURRENT_PAGE, currentPage);
         outState.putInt(AppCodes.KEY_LIST_POSITION, mAdapter.getListPosition());

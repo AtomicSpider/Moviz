@@ -27,7 +27,6 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
 
     private final String TAG = ReviewsRecyclerViewAdapter.class.getSimpleName();
 
-    private Context mContext;
     private MovizCallback mCallback;
     private LayoutInflater mLayoutInflater;
 
@@ -37,7 +36,6 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
     private boolean paging = false;
 
     public ReviewsRecyclerViewAdapter(Context context) {
-        this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         this.mReviewObjects = new ArrayList<>();
     }
@@ -60,7 +58,7 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
 
         if ((position == mReviewObjects.size() - 1)&& paging) {
             Log.i(TAG, "Reached final card");
-            mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE, null);
+            mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE, "");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.satandigital.moviz.fragments;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -137,34 +138,6 @@ public class DetailsFragment extends Fragment implements MovizCallback {
     }
 
     private void setUpFab() {
-//        Uri uri = MoviesContract.MoviesEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieObject.getId())).build();
-//        Log.d(TAG, "start query: " + uri);
-//        Cursor c = getContext().getContentResolver().query(uri, null, null, null, null);
-//
-//        if (c != null) {
-//            Log.d(TAG, "end: success: " + c.getCount());
-//
-//            while (c.moveToNext()) {
-//                Log.d(TAG, "" +
-//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry._ID)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POSTER_PATH)) + " " +
-//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_ADULT)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_OVERVIEW)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_GENRE_IDS)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_ORIGINAL_TITLE)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_ORIGINAL_LANGUAGE)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE)) + " " +
-//                        c.getString(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_BACKDROP_PATH)) + " " +
-//                        c.getDouble(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POPULARITY)) + " " +
-//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_VOTE_COUNT)) + " " +
-//                        c.getInt(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_VIDEO)) + " " +
-//                        c.getDouble(c.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE))
-//                );
-//            }
-//            c.close();
-//        } else Log.d(TAG, "end: fail");
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -321,5 +294,10 @@ public class DetailsFragment extends Fragment implements MovizCallback {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void CallbackRequest(String request, ArrayList<MovieObject> movieObjects) {
+
     }
 }

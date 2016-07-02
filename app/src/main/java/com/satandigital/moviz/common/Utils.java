@@ -112,4 +112,13 @@ public class Utils {
 
         return genreIdsStr;
     }
+
+    public static int[] getGenreArray(String string) {
+        String[] strArray = string.split(",");
+        int[] intArray = new int[strArray.length];
+        for (int i = 0; i < strArray.length; i++) {
+            intArray[i] = Integer.parseInt(strArray[i]);
+        }
+        return intArray;
+    }
 }
