@@ -3,6 +3,7 @@ package com.satandigital.moviz.fragments;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.activities.MainActivity;
 import com.satandigital.moviz.activities.ReviewsActivity;
 import com.satandigital.moviz.adapters.VideosRecyclerViewAdapter;
 import com.satandigital.moviz.asynctasks.DatabaseTask;
@@ -51,6 +54,7 @@ public class DetailsFragment extends Fragment implements MovizCallback {
 
     private VideosRecyclerViewAdapter mAdapter;
     private MovizCallback movizCallback = this;
+    private MovizCallback mCallback;
 
     //Views
     @BindView(R.id.backdrop)
@@ -118,6 +122,13 @@ public class DetailsFragment extends Fragment implements MovizCallback {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (MainActivity.twoPane) mCallback = (MovizCallback) getActivity();
+    }
+
     private void setVideosRecyclerView() {
         mAdapter = new VideosRecyclerViewAdapter(getActivity());
         videosRv.setAdapter(mAdapter);
@@ -125,7 +136,9 @@ public class DetailsFragment extends Fragment implements MovizCallback {
 
     private void getData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            movieObject = getActivity().getIntent().getParcelableExtra("data");
+            Bundle mBundle = getArguments();
+            if (mBundle != null) movieObject = mBundle.getParcelable("data");
+            else movieObject = getActivity().getIntent().getParcelableExtra("data");
             getVideos(movieObject.getId());
             getReviews(movieObject.getId());
         } else {
@@ -274,6 +287,8 @@ public class DetailsFragment extends Fragment implements MovizCallback {
                     Log.d(TAG, "Movie deleted from Favorites");
                     isFavorite = false;
                     fab.setImageResource(R.drawable.ic_heart_disabled_24_4);
+                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES))
+                        mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
                     Toast.makeText(getActivity(), "Removed from favorites", Toast.LENGTH_SHORT).show();
                 } else if (data.equals("false")) {
                     Log.d(TAG, "Movie could not be deleted from Favorites");
@@ -286,6 +301,8 @@ public class DetailsFragment extends Fragment implements MovizCallback {
                     Log.d(TAG, "Movie added to Favorites");
                     isFavorite = true;
                     fab.setImageResource(R.drawable.ic_heart_24_4);
+                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES))
+                        mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
                     Toast.makeText(getActivity(), "Added to favorites", Toast.LENGTH_SHORT).show();
                 } else if (data.equals("false")) {
                     Log.d(TAG, "Movie could not be added to Favorites");

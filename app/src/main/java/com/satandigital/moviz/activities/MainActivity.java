@@ -13,8 +13,10 @@ import android.widget.Spinner;
 
 import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
+import com.satandigital.moviz.callbacks.MovieDetailCallback;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
+import com.satandigital.moviz.fragments.DetailsFragment;
 import com.satandigital.moviz.models.MovieObject;
 
 import java.util.ArrayList;
@@ -26,9 +28,10 @@ import butterknife.ButterKnife;
  * Project : Moviz
  * Created by Sanat Dutta on 6/14/2016.
  */
-public class MainActivity extends AppCompatActivity implements MovizCallback {
+public class MainActivity extends AppCompatActivity implements MovizCallback, MovieDetailCallback {
 
     private final String TAG = MainActivity.class.getSimpleName();
+    private final String DETAIL_FRAG_TAG = "DETAIL_FRAG_TAG";
 
     public static MovizCallback mCallback;
 
@@ -40,12 +43,15 @@ public class MainActivity extends AppCompatActivity implements MovizCallback {
 
     //Data
     private boolean isSpinnerTouched = false;
+    public static boolean twoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        twoPane = findViewById(R.id.movie_details_container) != null;
 
         setUpToolbar();
         setUpSpinner();
@@ -121,11 +127,24 @@ public class MainActivity extends AppCompatActivity implements MovizCallback {
         if (request.equals(AppCodes.CALLBACK_TOGGLE_SPINNER)) {
             if (data.equals("ENABLE")) spinner_toolbar.setEnabled(true);
             else if (data.equals("DISABLE")) spinner_toolbar.setEnabled(false);
+        } else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)) {
+            mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
         }
     }
 
     @Override
     public void CallbackRequest(String request, ArrayList<MovieObject> movieObjects) {
 
+    }
+
+    @Override
+    public void CallbackRequest(String request, Bundle movieBundle) {
+
+        DetailsFragment fragment = new DetailsFragment();
+        fragment.setArguments(movieBundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.movie_details_container, fragment, DETAIL_FRAG_TAG)
+                .commit();
     }
 }

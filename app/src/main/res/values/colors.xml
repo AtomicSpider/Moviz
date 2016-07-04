@@ -3,7 +3,7 @@
     <!-- Theme Colors -->
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#DD4B39</color>
+    <color name="colorAccent">#FE498C</color>
 
     <color name="white">#FFFFFF</color>
     <color name="white_e">#EEE</color>

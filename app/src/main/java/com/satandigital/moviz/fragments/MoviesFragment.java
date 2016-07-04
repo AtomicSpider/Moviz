@@ -18,6 +18,7 @@ import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.MainActivity;
 import com.satandigital.moviz.adapters.MoviesRecyclerViewAdapter;
 import com.satandigital.moviz.asynctasks.DatabaseTask;
+import com.satandigital.moviz.callbacks.MovieDetailCallback;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
@@ -37,12 +38,13 @@ import retrofit2.Response;
  * Project : Moviz
  * Created by Sanat Dutta on 6/26/2016.
  */
-public class MoviesFragment extends Fragment implements MovizCallback {
+public class MoviesFragment extends Fragment implements MovizCallback, MovieDetailCallback {
 
     private String TAG = MoviesFragment.class.getSimpleName();
 
     private MoviesRecyclerViewAdapter mAdapter;
-    public static MovizCallback mCallback;
+    private MovizCallback mCallback;
+    private MovieDetailCallback movieDetailCallback;
 
     //Views
     @BindView(R.id.recycler_view)
@@ -71,6 +73,8 @@ public class MoviesFragment extends Fragment implements MovizCallback {
 
         movieListType = MovizApp.movieListType;
         MainActivity.setCallback(this);
+
+        movieDetailCallback = (MovieDetailCallback) getActivity();
         mCallback = (MovizCallback) getActivity();
 
         if (savedInstanceState == null) fetchMovies(1, movieListType);
@@ -96,6 +100,7 @@ public class MoviesFragment extends Fragment implements MovizCallback {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnSize));
         mAdapter = new MoviesRecyclerViewAdapter(getActivity());
         mAdapter.setCallback(this);
+        mAdapter.setMovieDetailCallback(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -106,6 +111,8 @@ public class MoviesFragment extends Fragment implements MovizCallback {
             fetchMovies(1, movieListType);
         } else if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchMovies(currentPage + 1, movieListType);
+        else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)&& !isFetchOngoing)
+            fetchMovies(1, movieListType);
     }
 
     @Override
@@ -124,6 +131,11 @@ public class MoviesFragment extends Fragment implements MovizCallback {
         isFetchOngoing = false;
         toggleProgressBar(false);
         mCallback.CallbackRequest(AppCodes.CALLBACK_TOGGLE_SPINNER, "ENABLE");
+    }
+
+    @Override
+    public void CallbackRequest(String request, Bundle movieBundle) {
+        movieDetailCallback.CallbackRequest(AppCodes.CALLBACK_MOVIE_BUNDLE, movieBundle);
     }
 
     private void fetchMovies(int nextPage, final String mListType) {

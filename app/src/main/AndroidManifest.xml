@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".activities.DetailsActivity"
-            android:theme="@style/mDetailsTheme"/>
+            android:theme="@style/mAppThemeNoActionBar"/>
         <activity
             android:name=".activities.ReviewsActivity"
             android:theme="@style/mAppTheme"/>

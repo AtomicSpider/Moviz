@@ -2,6 +2,7 @@ package com.satandigital.moviz.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.DetailsActivity;
+import com.satandigital.moviz.activities.MainActivity;
+import com.satandigital.moviz.callbacks.MovieDetailCallback;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.models.MovieObject;
@@ -32,13 +35,14 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     private Context mContext;
     private MovizCallback mCallback;
+    private MovieDetailCallback movieDetailCallback;
     private LayoutInflater mLayoutInflater;
     private boolean paging = true;
 
     //Data
     private ArrayList<MovieObject> movieObjects;
     private String TMDB_BASE_POSTER_PATH;
-    private int listPosition =0;
+    private int listPosition = 0;
 
     public MoviesRecyclerViewAdapter(Context context) {
         this.mContext = context;
@@ -50,6 +54,10 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     public void setCallback(MovizCallback callback) {
         this.mCallback = callback;
+    }
+
+    public void setMovieDetailCallback(MovieDetailCallback callback) {
+        this.movieDetailCallback = callback;
     }
 
     @Override
@@ -70,9 +78,15 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Launching details for: " + movieObjects.get(position).getOriginal_title());
-                Intent mIntent = new Intent(mContext, DetailsActivity.class);
-                mIntent.putExtra("data", movieObjects.get(position));
-                mContext.startActivity(mIntent);
+                if (MainActivity.twoPane) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("data", movieObjects.get(position));
+                    movieDetailCallback.CallbackRequest(AppCodes.CALLBACK_MOVIE_BUNDLE, bundle);
+                } else {
+                    Intent mIntent = new Intent(mContext, DetailsActivity.class);
+                    mIntent.putExtra("data", movieObjects.get(position));
+                    mContext.startActivity(mIntent);
+                }
             }
         });
 

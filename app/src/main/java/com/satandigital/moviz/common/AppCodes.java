@@ -24,6 +24,9 @@ public class AppCodes {
     public static final String CALLBACK_ADD_FAVORITE = "CALLBACK_ADD_FAVORITE";
     public static final String CALLBACK_QUERY_FAVORITE_LIST = "CALLBACK_QUERY_FAVORITE_LIST";
 
+    public static final String CALLBACK_MOVIE_BUNDLE = "CALLBACK_MOVIE_BUNDLE";
+    public static final String CALLBACK_REFRESH_FAVORITES = "CALLBACK_REFRESH_FAVORITES";
+
     //MoviesListFragment
     public static final String KEY_MOVIE_OBJECTS = "KEY_MOVIE_OBJECTS";
     public static final String KEY_MOVIE_LIST_TYPE = "KEY_MOVIE_LIST_TYPE";
