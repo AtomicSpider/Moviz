@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.activities.DetailsActivity;
 import com.satandigital.moviz.activities.MainActivity;
@@ -74,19 +75,17 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         Picasso.with(mContext).load(TMDB_BASE_POSTER_PATH + movieObjects.get(position).getPoster_path()).placeholder(R.drawable.placeholder_poster).error(R.drawable.placeholder_error_poster).into(holder.movie_poster_iv);
         holder.movie_title_tv.setText(movieObjects.get(position).getOriginal_title());
 
+        if (MovizApp.itemAutoSelect && MainActivity.twoPane) {
+            MovizApp.itemAutoSelect = false;
+            sendBundle(position);
+        }
+
         holder.movie_poster_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Launching details for: " + movieObjects.get(position).getOriginal_title());
-                if (MainActivity.twoPane) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("data", movieObjects.get(position));
-                    movieDetailCallback.CallbackRequest(AppCodes.CALLBACK_MOVIE_BUNDLE, bundle);
-                } else {
-                    Intent mIntent = new Intent(mContext, DetailsActivity.class);
-                    mIntent.putExtra("data", movieObjects.get(position));
-                    mContext.startActivity(mIntent);
-                }
+                if (MainActivity.twoPane) sendBundle(position);
+                else sendIntent(position);
             }
         });
 
@@ -112,6 +111,18 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    private void sendIntent(int position) {
+        Intent mIntent = new Intent(mContext, DetailsActivity.class);
+        mIntent.putExtra("data", movieObjects.get(position));
+        mContext.startActivity(mIntent);
+    }
+
+    private void sendBundle(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("data", movieObjects.get(position));
+        movieDetailCallback.CallbackRequest(AppCodes.CALLBACK_MOVIE_BUNDLE, bundle);
     }
 
     public void clearAllAndPopulate(ArrayList<MovieObject> movies) {

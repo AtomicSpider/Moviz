@@ -20,6 +20,7 @@ public class MovizApp extends Application {
     public static SharedPreferences mSharedPreferences;
     public static String movieListType;
     public static boolean isPreLollipop = false;
+    public static boolean itemAutoSelect = true;
 
     @Override
     public void onCreate() {
