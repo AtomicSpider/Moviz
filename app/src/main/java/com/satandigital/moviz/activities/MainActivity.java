@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
         spinner_toolbar = (Spinner) findViewById(R.id.spinner_toolbar);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.spinner_items, R.layout.spinner_item_actionbar);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_actionbar);
         spinner_toolbar.setAdapter(adapter);
 
         switch (MovizApp.movieListType) {
@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
             if (data.equals("ENABLE")) spinner_toolbar.setEnabled(true);
             else if (data.equals("DISABLE")) spinner_toolbar.setEnabled(false);
         } else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)) {
+            Log.d(TAG, "Refresh");
             mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
         }
     }

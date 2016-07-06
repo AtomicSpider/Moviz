@@ -111,8 +111,10 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
             fetchMovies(1, movieListType);
         } else if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchMovies(currentPage + 1, movieListType);
-        else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)&& !isFetchOngoing)
+        else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)&& !isFetchOngoing) {
+            Log.d(TAG, "Refresh");
             fetchMovies(1, movieListType);
+        }
     }
 
     @Override

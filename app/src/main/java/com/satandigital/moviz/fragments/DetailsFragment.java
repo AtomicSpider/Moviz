@@ -287,8 +287,10 @@ public class DetailsFragment extends Fragment implements MovizCallback {
                     Log.d(TAG, "Movie deleted from Favorites");
                     isFavorite = false;
                     fab.setImageResource(R.drawable.ic_heart_disabled_24_4);
-                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES))
+                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
+                        Log.d(TAG, "Refresh");
                         mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
+                    }
                     Toast.makeText(getActivity(), "Removed from favorites", Toast.LENGTH_SHORT).show();
                 } else if (data.equals("false")) {
                     Log.d(TAG, "Movie could not be deleted from Favorites");
@@ -301,8 +303,10 @@ public class DetailsFragment extends Fragment implements MovizCallback {
                     Log.d(TAG, "Movie added to Favorites");
                     isFavorite = true;
                     fab.setImageResource(R.drawable.ic_heart_24_4);
-                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES))
+                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
+                        Log.d(TAG, "Refresh");
                         mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
+                    }
                     Toast.makeText(getActivity(), "Added to favorites", Toast.LENGTH_SHORT).show();
                 } else if (data.equals("false")) {
                     Log.d(TAG, "Movie could not be added to Favorites");
