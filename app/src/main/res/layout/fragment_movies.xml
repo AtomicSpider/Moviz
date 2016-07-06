@@ -7,12 +7,29 @@
     android:orientation="vertical"
     tools:context=".fragments.MoviesFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:listitem="@layout/item_grid" />
+        android:layout_weight="1">
+
+        <com.satandigital.moviz.models.RecyclerViewWithEmptyView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_grid" />
+
+        <TextView
+            android:id="@+id/emptyView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_empty_48_0"
+            android:text="Oops, Nothing to see here."
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </FrameLayout>
 
     <com.github.rahatarmanahmed.cpv.CircularProgressView
         android:id="@+id/progress_bar"

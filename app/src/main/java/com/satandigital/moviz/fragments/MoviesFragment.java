@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -22,6 +23,7 @@ import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
 import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.RecyclerViewWithEmptyView;
 import com.satandigital.moviz.models.TmdbRawMoviesObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
 
@@ -47,7 +49,9 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
     //Views
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    RecyclerViewWithEmptyView mRecyclerView;
+    @BindView(R.id.emptyView)
+    TextView emptyView;
     @BindView(R.id.progress_bar)
     CircularProgressView mProgressView;
 
@@ -100,6 +104,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         mAdapter = new MoviesRecyclerViewAdapter(getActivity());
         mAdapter.setCallback(this);
         mAdapter.setMovieDetailCallback(this);
+        mRecyclerView.setEmptyView(emptyView);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -110,7 +115,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
             fetchMovies(1, movieListType);
         } else if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchMovies(currentPage + 1, movieListType);
-        else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)&& !isFetchOngoing) {
+        else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES) && !isFetchOngoing) {
             Log.i(TAG, "Refresh Favorites List");
             fetchMovies(1, movieListType);
         }
