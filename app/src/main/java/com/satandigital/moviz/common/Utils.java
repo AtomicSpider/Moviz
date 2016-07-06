@@ -11,7 +11,10 @@ import com.satandigital.moviz.models.MovieObject;
  * Project : Moviz
  * Created by Sanat Dutta on 6/15/2016.
  */
-public class Utils {
+public final class Utils {
+
+    private Utils() {
+    }
 
     public static void saveToSharedPreferences(String key, String sValue) {
         SharedPreferences.Editor mEditor = MovizApp.mSharedPreferences.edit();
@@ -34,52 +37,74 @@ public class Utils {
     }
 
     public static String getGenre(int[] genre_ids) {
-        String genre = "";
-        for (int i = 0; i < genre_ids.length; i++) {
-            if (genre_ids[i] == 28)
-                genre += "Action";
-            if (genre_ids[i] == 12)
-                genre += "Adventure";
-            if (genre_ids[i] == 16)
-                genre += "Animation";
-            if (genre_ids[i] == 35)
-                genre += "Comedy";
-            if (genre_ids[i] == 80)
-                genre += "Crime";
-            if (genre_ids[i] == 99)
-                genre += "Documentary";
-            if (genre_ids[i] == 18)
-                genre += "Drama";
-            if (genre_ids[i] == 10751)
-                genre += "Family";
-            if (genre_ids[i] == 14)
-                genre += "Fantasy";
-            if (genre_ids[i] == 10769)
-                genre += "Foreign";
-            if (genre_ids[i] == 36)
-                genre += "History";
-            if (genre_ids[i] == 27)
-                genre += "Horror";
-            if (genre_ids[i] == 10402)
-                genre += "Music";
-            if (genre_ids[i] == 9648)
-                genre += "Mystery";
-            if (genre_ids[i] == 10749)
-                genre += "Romance";
-            if (genre_ids[i] == 878)
-                genre += "SciFi";
-            if (genre_ids[i] == 10770)
-                genre += "TV Movie";
-            if (genre_ids[i] == 53)
-                genre += "Thriller";
-            if (genre_ids[i] == 10752)
-                genre += "War";
-            if (genre_ids[i] == 37)
-                genre += "Western";
+        StringBuilder genreBuilder = new StringBuilder();
 
-            if (i != genre_ids.length - 1) genre += " | ";
+        for (int i = 0; i < genre_ids.length; i++) {
+            switch (genre_ids[i]) {
+                case 28:
+                    genreBuilder.append("Action");
+                    break;
+                case 12:
+                    genreBuilder.append("Adventure");
+                    break;
+                case 16:
+                    genreBuilder.append("Animation");
+                    break;
+                case 35:
+                    genreBuilder.append("Comedy");
+                    break;
+                case 80:
+                    genreBuilder.append("Crime");
+                    break;
+                case 99:
+                    genreBuilder.append("Documentary");
+                    break;
+                case 18:
+                    genreBuilder.append("Drama");
+                    break;
+                case 10751:
+                    genreBuilder.append("Family");
+                    break;
+                case 14:
+                    genreBuilder.append("Fantasy");
+                    break;
+                case 10769:
+                    genreBuilder.append("Foreign");
+                    break;
+                case 36:
+                    genreBuilder.append("History");
+                    break;
+                case 27:
+                    genreBuilder.append("Horror");
+                    break;
+                case 10402:
+                    genreBuilder.append("Music");
+                    break;
+                case 9648:
+                    genreBuilder.append("Mystery");
+                    break;
+                case 10749:
+                    genreBuilder.append("Romance");
+                    break;
+                case 878:
+                    genreBuilder.append("SciFi");
+                    break;
+                case 10770:
+                    genreBuilder.append("TV Movie");
+                    break;
+                case 53:
+                    genreBuilder.append("Thriller");
+                    break;
+                case 10752:
+                    genreBuilder.append("War");
+                    break;
+                case 37:
+                    genreBuilder.append("Western");
+                    break;
+            }
+            if (i != genre_ids.length - 1) genreBuilder.append(" | ");
         }
-        return genre;
+        return genreBuilder.toString();
     }
 
     public static ContentValues getContentValues(MovieObject movieObject) {
