@@ -1,6 +1,5 @@
 package com.satandigital.moviz.fragments;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -112,7 +111,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         } else if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchMovies(currentPage + 1, movieListType);
         else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)&& !isFetchOngoing) {
-            Log.d(TAG, "Refresh");
+            Log.i(TAG, "Refresh Favorites List");
             fetchMovies(1, movieListType);
         }
     }

@@ -68,11 +68,11 @@ public class DatabaseTask extends AsyncTask<String, Void, String[]> {
             }
             case AppCodes.TASK_QUERY_FAVORITE_LIST: {
                 Uri uri = MoviesContract.MoviesEntry.CONTENT_URI;
-                Log.d(TAG, "Query Started: " + uri);
+                Log.i(TAG, "Query Started: " + uri);
                 Cursor c = mContext.getContentResolver().query(uri, null, null, null, null);
 
                 if (c != null) {
-                    Log.d(TAG, "Query Ended: " + c.getCount());
+                    Log.i(TAG, "Query Ended, Items: " + c.getCount());
                     movieObjects = new ArrayList<>();
 
                     while (c.moveToNext()) {
@@ -96,7 +96,7 @@ public class DatabaseTask extends AsyncTask<String, Void, String[]> {
                     }
                     c.close();
                     return new String[]{AppCodes.CALLBACK_QUERY_FAVORITE_LIST};
-                } else Log.d(TAG, "Query Failed");
+                } else Log.i(TAG, "Query Failed");
             }
         }
 

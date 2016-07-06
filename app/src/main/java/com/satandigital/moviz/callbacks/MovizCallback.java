@@ -1,7 +1,5 @@
 package com.satandigital.moviz.callbacks;
 
-import android.database.Cursor;
-
 import com.satandigital.moviz.models.MovieObject;
 
 import java.util.ArrayList;

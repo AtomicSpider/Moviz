@@ -69,7 +69,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Log.d(TAG, "" + position);
         listPosition = position;
 
         Picasso.with(mContext).load(TMDB_BASE_POSTER_PATH + movieObjects.get(position).getPoster_path()).placeholder(R.drawable.placeholder_poster).error(R.drawable.placeholder_error_poster).into(holder.movie_poster_iv);

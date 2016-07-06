@@ -1,7 +1,6 @@
 package com.satandigital.moviz.fragments;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -274,42 +273,42 @@ public class DetailsFragment extends Fragment implements MovizCallback {
         switch (request) {
             case AppCodes.CALLBACK_IS_FAVORITE:
                 if (data.equals("true")) {
-                    Log.d(TAG, "Movie is in Favorites");
+                    Log.i(TAG, "Movie is in Favorites");
                     isFavorite = true;
                     fab.setImageResource(R.drawable.ic_heart_24_4);
                 } else if (data.equals("false")) {
                     isFavorite = false;
-                    Log.d(TAG, "Movie is not in Favorites");
+                    Log.i(TAG, "Movie is not in Favorites");
                 }
                 break;
             case AppCodes.CALLBACK_DELETE_FAVORITE:
                 if (data.equals("true")) {
-                    Log.d(TAG, "Movie deleted from Favorites");
+                    Log.i(TAG, "Movie deleted from Favorites");
                     isFavorite = false;
                     fab.setImageResource(R.drawable.ic_heart_disabled_24_4);
                     if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
-                        Log.d(TAG, "Refresh");
+                        Log.i(TAG, "Refresh Favorites List");
                         mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
                     }
                     Toast.makeText(getActivity(), "Removed from favorites", Toast.LENGTH_SHORT).show();
                 } else if (data.equals("false")) {
-                    Log.d(TAG, "Movie could not be deleted from Favorites");
+                    Log.i(TAG, "Movie could not be deleted from Favorites");
                     isFavorite = true;
                     fab.setImageResource(R.drawable.ic_heart_24_4);
                 }
                 break;
             case AppCodes.CALLBACK_ADD_FAVORITE:
                 if (data.equals("true")) {
-                    Log.d(TAG, "Movie added to Favorites");
+                    Log.i(TAG, "Movie added to Favorites");
                     isFavorite = true;
                     fab.setImageResource(R.drawable.ic_heart_24_4);
                     if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
-                        Log.d(TAG, "Refresh");
+                        Log.i(TAG, "Refresh Favorites List");
                         mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
                     }
                     Toast.makeText(getActivity(), "Added to favorites", Toast.LENGTH_SHORT).show();
                 } else if (data.equals("false")) {
-                    Log.d(TAG, "Movie could not be added to Favorites");
+                    Log.i(TAG, "Movie could not be added to Favorites");
                     isFavorite = false;
                     fab.setImageResource(R.drawable.ic_heart_disabled_24_4);
                 }

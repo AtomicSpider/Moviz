@@ -12,8 +12,6 @@ import com.satandigital.moviz.fragments.DetailsFragment;
  */
 public class DetailsActivity extends AppCompatActivity {
 
-    private final String TAG = DetailsActivity.class.getSimpleName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

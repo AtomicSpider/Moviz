@@ -1,6 +1,5 @@
 package com.satandigital.moviz.activities;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_actionbar);
         spinner_toolbar.setAdapter(adapter);
 
+        //Load spinner state from preference
         switch (MovizApp.movieListType) {
             case AppCodes.PREF_MOVIE_LIST_POPULAR:
                 spinner_toolbar.setSelection(0);
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
                 break;
         }
 
+        //Only on user touch
         spinner_toolbar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -125,10 +126,12 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
     @Override
     public void CallbackRequest(String request, String data) {
         if (request.equals(AppCodes.CALLBACK_TOGGLE_SPINNER)) {
-            if (data.equals("ENABLE")) spinner_toolbar.setEnabled(true);
-            else if (data.equals("DISABLE")) spinner_toolbar.setEnabled(false);
+            if (data.equals("ENABLE"))
+                spinner_toolbar.setEnabled(true);
+            else if (data.equals("DISABLE"))
+                spinner_toolbar.setEnabled(false);
         } else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES)) {
-            Log.d(TAG, "Refresh");
+            Log.i(TAG, "Refresh Favorites List");
             mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
         }
     }
