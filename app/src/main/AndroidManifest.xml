@@ -18,22 +18,30 @@
             android:exported="false" />
 
         <activity
+            android:launchMode="singleTop"
             android:name=".activities.MainActivity"
             android:theme="@style/mAppTheme">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activities.MainActivity" />
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/search_config" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.DetailsActivity"
             android:theme="@style/mAppThemeNoActionBar" />
+
         <activity
             android:name=".activities.ReviewsActivity"
             android:theme="@style/mAppTheme" />
+
     </application>
 
 </manifest>

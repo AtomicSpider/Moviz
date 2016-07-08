@@ -1,8 +1,10 @@
 package com.satandigital.moviz.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -18,8 +20,6 @@ import com.satandigital.moviz.fragments.DetailsFragment;
 import com.satandigital.moviz.models.MovieObject;
 
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
 
 /**
  * Project : Moviz
@@ -38,11 +38,22 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         twoPane = findViewById(R.id.movie_details_container) != null;
-
         setUpTitle();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        //ToDo make sure fetch is not ongoing
+
+        Log.d(TAG, "NewIntent");
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d(TAG, "" + query);
+        }
     }
 
     private void setUpTitle() {
@@ -92,22 +103,13 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.d(TAG, query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return super.onCreateOptionsMenu(menu);
     }
