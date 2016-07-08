@@ -124,6 +124,12 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES) && !isFetchOngoing) {
             Log.i(TAG, "Refresh Favorites List");
             fetchMovies(1, movieListType);
+        } else if (request.equals(AppCodes.CALLBACK_VIEW_SEARCH_RESULTS)) {
+            if (!isFetchOngoing) {
+                Log.i(TAG, "Search Movies");
+                //ToDo
+            } else
+                Toast.makeText(getActivity(), "Process already running, Please wait...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -260,7 +266,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if (!isFetchOngoing && !item.isChecked() && itemId != R.id.action_sort) {
+        if (!isFetchOngoing && !item.isChecked() && itemId != R.id.action_sort && itemId != R.id.search) {
             switch (itemId) {
                 case R.id.action_popular:
                     Log.d(TAG, "Popular");

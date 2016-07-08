@@ -47,12 +47,13 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        //ToDo make sure fetch is not ongoing
+        Log.i(TAG, "New Intent");
 
-        Log.d(TAG, "NewIntent");
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.d(TAG, "" + query);
+            Log.d(TAG, "Query parameter:" + query);
+
+            mCallback.CallbackRequest(AppCodes.CALLBACK_VIEW_SEARCH_RESULTS, query);
         }
     }
 
@@ -110,6 +111,15 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                Log.d(TAG, "SearchView Closed");
+
+                return true;
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
