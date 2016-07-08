@@ -2,5 +2,4 @@
 <resources>
     <integer name="grid_size">2</integer>
     <string name="orientation">portrait</string>
-    <dimen name="action_bar_spinner_item_text_size">22sp</dimen>
 </resources>

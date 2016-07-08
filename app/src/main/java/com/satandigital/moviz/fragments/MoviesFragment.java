@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,7 +46,6 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     private String TAG = MoviesFragment.class.getSimpleName();
 
     private MoviesRecyclerViewAdapter mAdapter;
-    private MovizCallback mCallback;
     private MovieDetailCallback movieDetailCallback;
 
     //Views
@@ -59,6 +60,14 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     private boolean isFetchOngoing = false;
     private String movieListType;
     private int currentPage = 1;
+    private boolean firstDisplay = true;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -78,11 +87,11 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         MainActivity.setCallback(this);
 
         movieDetailCallback = (MovieDetailCallback) getActivity();
-        mCallback = (MovizCallback) getActivity();
 
         if (savedInstanceState == null) fetchMovies(1, movieListType);
         else {
             currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
+            firstDisplay = savedInstanceState.getBoolean(AppCodes.KEY_FIRST_DISPLAY);
             movieListType = savedInstanceState.getString(AppCodes.KEY_MOVIE_LIST_TYPE);
             ArrayList<MovieObject> movieObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_MOVIE_OBJECTS);
             if (movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) mAdapter.setPaging(false);
@@ -110,10 +119,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
     @Override
     public void CallbackRequest(String request, String data) {
-        if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_TYPE)) {
-            movieListType = data;
-            fetchMovies(1, movieListType);
-        } else if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
+        if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
             fetchMovies(currentPage + 1, movieListType);
         else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES) && !isFetchOngoing) {
             Log.i(TAG, "Refresh Favorites List");
@@ -123,9 +129,11 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
     @Override
     public void CallbackRequest(String request, ArrayList<MovieObject> movieObjects) {
+        currentPage = 1;
+        firstDisplay = false;
+        Log.d(TAG, "Saving pref as: " + movieListType);
+        Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
         if (movieObjects != null && movieObjects.size() > 0) {
-            Log.i(TAG, "Saving Pref as: " + movieListType);
-            Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
             mAdapter.setPaging(false);
             mAdapter.clearAllAndPopulate(movieObjects);
         } else {
@@ -136,7 +144,6 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
         isFetchOngoing = false;
         toggleProgressBar(false);
-        mCallback.CallbackRequest(AppCodes.CALLBACK_TOGGLE_SPINNER, "ENABLE");
     }
 
     @Override
@@ -147,7 +154,6 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     private void fetchMovies(int nextPage, final String mListType) {
         Log.i(TAG, "Fetch movies, Page: " + nextPage + " ListType: " + mListType);
         isFetchOngoing = true;
-        mCallback.CallbackRequest(AppCodes.CALLBACK_TOGGLE_SPINNER, "DISABLE");
         toggleProgressBar(true);
 
         if (!mListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
@@ -165,33 +171,49 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
                 @Override
                 public void onResponse(Call<TmdbRawMoviesObject> call, Response<TmdbRawMoviesObject> response) {
                     if (response.isSuccessful()) {
+                        firstDisplay = false;
                         Log.i(TAG, "Retrofit Response Successful");
 
                         currentPage = response.body().getPage();
                         mAdapter.setPaging(true);
-                        if (currentPage == 1) {
-                            Log.i(TAG, "Saving Pref as: " + movieListType);
-                            Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
+                        if (currentPage == 1)
                             mAdapter.clearAllAndPopulate(response.body().getResults());
-                        } else mAdapter.addItemsAndPopulate(response.body().getResults());
+                        else mAdapter.addItemsAndPopulate(response.body().getResults());
                     } else {
                         Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Retrofit Response Failure" + response.message());
+                        CleanRecyclerView();
                     }
+                    Log.d(TAG, "Saving pref as: " + movieListType);
+                    Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
+
                     fetchEnded();
                 }
 
                 @Override
                 public void onFailure(Call<TmdbRawMoviesObject> call, Throwable t) {
+                    CleanRecyclerView();
+
+                    Log.d(TAG, "Saving pref as: " + movieListType);
+                    Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
+
                     Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Retrofit Failure" + t.getMessage());
+
                     fetchEnded();
+                }
+
+                private void CleanRecyclerView() {
+
+                    if (!movieListType.equals(MovizApp.movieListType) || firstDisplay)
+                        mAdapter.clearAllAndPopulate(new ArrayList<MovieObject>());
+
+                    firstDisplay = false;
                 }
 
                 private void fetchEnded() {
                     isFetchOngoing = false;
                     toggleProgressBar(false);
-                    mCallback.CallbackRequest(AppCodes.CALLBACK_TOGGLE_SPINNER, "ENABLE");
                 }
             };
             call.enqueue(callback);
@@ -212,5 +234,54 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         outState.putInt(AppCodes.KEY_LIST_POSITION, mAdapter.getListPosition());
         outState.putString(AppCodes.KEY_MOVIE_LIST_TYPE, movieListType);
         outState.putInt(AppCodes.KEY_CURRENT_PAGE, currentPage);
+        outState.putBoolean(AppCodes.KEY_FIRST_DISPLAY, firstDisplay);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_details, menu);
+
+        switch (MovizApp.movieListType) {
+            case AppCodes.PREF_MOVIE_LIST_POPULAR:
+                menu.findItem(R.id.action_popular).setChecked(true);
+                break;
+            case AppCodes.PREF_MOVIE_LIST_TOP_RATED:
+                menu.findItem(R.id.action_top_rated).setChecked(true);
+                break;
+            case AppCodes.PREF_MOVIE_LIST_FAVORITES:
+                menu.findItem(R.id.action_favorites).setChecked(true);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (!isFetchOngoing && !item.isChecked() && itemId != R.id.action_sort) {
+            switch (itemId) {
+                case R.id.action_popular:
+                    Log.d(TAG, "Popular");
+                    getActivity().setTitle("Popular");
+                    movieListType = AppCodes.PREF_MOVIE_LIST_POPULAR;
+                    break;
+                case R.id.action_top_rated:
+                    Log.d(TAG, "Top Rated");
+                    getActivity().setTitle("Top Rated");
+                    movieListType = AppCodes.PREF_MOVIE_LIST_TOP_RATED;
+                    break;
+                case R.id.action_favorites:
+                    Log.d(TAG, "Favorites");
+                    getActivity().setTitle("Favorites");
+                    movieListType = AppCodes.PREF_MOVIE_LIST_FAVORITES;
+                    break;
+            }
+            item.setChecked(true);
+            fetchMovies(1, movieListType);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

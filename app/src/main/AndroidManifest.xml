@@ -19,7 +19,7 @@
 
         <activity
             android:name=".activities.MainActivity"
-            android:theme="@style/mAppThemeNoActionBar">
+            android:theme="@style/mAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

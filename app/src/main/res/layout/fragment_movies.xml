@@ -28,7 +28,8 @@
             android:text="Oops, Nothing to see here."
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
     </FrameLayout>
 
     <com.github.rahatarmanahmed.cpv.CircularProgressView

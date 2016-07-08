@@ -17,4 +17,10 @@
         <item>Top Rated</item>
         <item>Favorites</item>
     </string-array>
+
+    <!--Menu-->
+    <string name="sort">Sort</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="favorites">Favorites</string>
 </resources>

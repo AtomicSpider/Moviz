@@ -1,30 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_movies"
+    android:name="com.satandigital.moviz.fragments.MoviesFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
-
-        <Spinner
-            android:id="@+id/spinner_toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:dropDownWidth="150dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-    </android.support.v7.widget.Toolbar>
-
-    <fragment
-        android:id="@+id/fragment_movies"
-        android:name="com.satandigital.moviz.fragments.MoviesFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.MoviesFragment"
-        tools:layout="@layout/fragment_movies" />
-</LinearLayout>
+    tools:context=".fragments.MoviesFragment"
+    tools:layout="@layout/fragment_movies" />

@@ -15,9 +15,7 @@ public class AppCodes {
     public static final String PREF_MOVIE_LIST_FAVORITES = "favorites";
 
     //Callbacks
-    public static final String CALLBACK_FETCH_MOVIES_WITH_TYPE = "CALLBACK_FETCH_MOVIES_WITH_TYPE";
     public static final String CALLBACK_FETCH_MOVIES_WITH_PAGE = "CALLBACK_FETCH_MOVIES_WITH_PAGE";
-    public static final String CALLBACK_TOGGLE_SPINNER = "CALLBACK_TOGGLE_SPINNER";
 
     public static final String CALLBACK_IS_FAVORITE = "CALLBACK_IS_FAVORITE";
     public static final String CALLBACK_DELETE_FAVORITE = "CALLBACK_DELETE_FAVORITE";
@@ -32,6 +30,7 @@ public class AppCodes {
     public static final String KEY_MOVIE_LIST_TYPE = "KEY_MOVIE_LIST_TYPE";
     public static final String KEY_CURRENT_PAGE = "KEY_CURRENT_PAGE";
     public static final String KEY_LIST_POSITION = "KEY_LIST_POSITION";
+    public static final String KEY_FIRST_DISPLAY = "KEY_FIRST_DISPLAY";
 
     //DetailsFragment
     public static final String KEY_MOVIE_OBJECT = "KEY_MOVIE_OBJECT";

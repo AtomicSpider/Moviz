@@ -1,45 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:weightSum="2">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
-
-        <Spinner
-            android:id="@+id/spinner_toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:dropDownWidth="150dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <fragment
+        android:id="@+id/fragment_movies"
+        android:name="com.satandigital.moviz.fragments.MoviesFragment"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:layout_weight="1"
+        tools:context=".fragments.MoviesFragment"
+        tools:layout="@layout/fragment_movies" />
 
-        <fragment
-            android:id="@+id/fragment_movies"
-            android:name="com.satandigital.moviz.fragments.MoviesFragment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:context=".fragments.MoviesFragment"
-            tools:layout="@layout/fragment_movies" />
-
-        <FrameLayout
-            android:id="@+id/movie_details_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/movie_details_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 </LinearLayout>

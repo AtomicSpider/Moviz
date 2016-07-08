@@ -20,16 +20,9 @@ public final class Utils {
         SharedPreferences.Editor mEditor = MovizApp.mSharedPreferences.edit();
         mEditor.putString(key, sValue);
         mEditor.apply();
-    }
 
-    public static void saveToSharedPreferences(String key, boolean bValue) {
-        SharedPreferences.Editor mEditor = MovizApp.mSharedPreferences.edit();
-        mEditor.putBoolean(key, bValue);
-        mEditor.apply();
-    }
-
-    public static boolean readSharedPreferences(String key, boolean valueDefault) {
-        return MovizApp.mSharedPreferences.getBoolean(key, valueDefault);
+        //Update local reference
+        MovizApp.movieListType = sValue;
     }
 
     public static String readSharedPreferences(String key, String valueDefault) {
