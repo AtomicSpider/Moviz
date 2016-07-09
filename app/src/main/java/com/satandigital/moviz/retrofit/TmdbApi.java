@@ -34,6 +34,11 @@ public class TmdbApi {
         Call<TmdbRawMoviesObject> getUpcomingMovies(@Query("page") Integer page);
     }
 
+    public interface SearchMovies {
+        @GET("search/movie")
+        Call<TmdbRawMoviesObject> getSearchMovies(@Query("query") String query, @Query("page") Integer page);
+    }
+
     public interface MovieVideos {
         @GET("movie/{id}/videos")
         Call<TmdbRawVideosObject> getMovieVideos(@Path("id") Integer id);

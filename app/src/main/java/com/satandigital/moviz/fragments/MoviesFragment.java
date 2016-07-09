@@ -61,6 +61,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     private boolean firstFetch = true;
     private String movieListType;
     private int currentPage = 1;
+    private String queryString = "Batman";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,11 +89,12 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
         movieDetailCallback = (MovieDetailCallback) getActivity();
 
-        if (savedInstanceState == null) fetchMovies(1, movieListType);
+        if (savedInstanceState == null) fetchMovies(null, 1, movieListType);
         else {
             firstFetch = savedInstanceState.getBoolean(AppCodes.KEY_FIRST_FETCH);
             movieListType = savedInstanceState.getString(AppCodes.KEY_MOVIE_LIST_TYPE);
             currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
+            queryString = savedInstanceState.getString(AppCodes.KEY_CURRENT_QUERY_STRING);
             ArrayList<MovieObject> movieObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_MOVIE_OBJECTS);
 
             populateRecyclerView(movieListType, movieObjects);
@@ -127,6 +129,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
                 if (movieListType.equals(MovizApp.savedMovieListType) && !firstFetch)
                     mAdapter.populateView(false, true, new ArrayList<MovieObject>());
                 else {
+                    //ToDo check network
                     mRecyclerView.setState(AppCodes.STATE_NO_NETWORK);
                     mAdapter.populateView(false, false, new ArrayList<MovieObject>());
                     Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
@@ -135,9 +138,12 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         } else {
             if (AppCodes.PREF_MOVIE_LIST_FAVORITES.equals(movieListType)) {
                 mAdapter.populateView(false, false, movieObjects);
+                mRecyclerView.scrollToPosition(0);
             } else {
-                if (currentPage == 1) mAdapter.populateView(true, false, movieObjects);
-                else mAdapter.populateView(true, true, movieObjects);
+                if (currentPage == 1) {
+                    mAdapter.populateView(true, false, movieObjects);
+                    mRecyclerView.scrollToPosition(0);
+                } else mAdapter.populateView(true, true, movieObjects);
             }
         }
 
@@ -147,16 +153,24 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     @Override
     public void CallbackRequest(String request, String data) {
         if (request.equals(AppCodes.CALLBACK_FETCH_MOVIES_WITH_PAGE) && !isFetchOngoing)
-            fetchMovies(currentPage + 1, movieListType);
+            fetchMovies(queryString, currentPage + 1, movieListType);
         else if (request.equals(AppCodes.CALLBACK_REFRESH_FAVORITES) && !isFetchOngoing) {
             Log.i(TAG, "Refresh Favorites List");
-            fetchMovies(1, movieListType);
+            fetchMovies(null, 1, movieListType);
         } else if (request.equals(AppCodes.CALLBACK_VIEW_SEARCH_RESULTS)) {
             if (!isFetchOngoing) {
                 Log.i(TAG, "Search Movies");
-                //ToDo
+                getActivity().setTitle("Search");
+                queryString = data;
+                movieListType = AppCodes.PREF_MOVIE_LIST_SEARCH;
+                fetchMovies(queryString, 1, movieListType);
             } else
                 Toast.makeText(getActivity(), "Process already running, Please wait...", Toast.LENGTH_SHORT).show();
+        } else if (request.equals(AppCodes.CALLBACK_FETCH_POPULAR) && !isFetchOngoing) {
+            Log.i(TAG, "Searchview closed, fetch popular");
+            getActivity().setTitle("Popular");
+            movieListType = AppCodes.PREF_MOVIE_LIST_POPULAR;
+            fetchMovies(null, 1, movieListType);
         }
     }
 
@@ -178,7 +192,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         movieDetailCallback.CallbackRequest(AppCodes.CALLBACK_MOVIE_BUNDLE, movieBundle);
     }
 
-    private void fetchMovies(int nextPage, final String mListType) {
+    private void fetchMovies(String queryStr, int nextPage, final String mListType) {
         Log.i(TAG, "Fetch movies, Page: " + nextPage + " ListType: " + mListType);
         isFetchOngoing = true;
         toggleProgressBar(true);
@@ -205,6 +219,11 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
                     call = TmdbClient.getInstance(getActivity())
                             .getUpcomingMoviesClient()
                             .getUpcomingMovies(nextPage);
+                    break;
+                case AppCodes.PREF_MOVIE_LIST_SEARCH:
+                    call = TmdbClient.getInstance(getActivity())
+                            .getSearchMoviesClient()
+                            .getSearchMovies(queryStr, nextPage);
                     break;
             }
             Callback<TmdbRawMoviesObject> callback = new Callback<TmdbRawMoviesObject>() {
@@ -256,6 +275,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         outState.putInt(AppCodes.KEY_LIST_POSITION, mAdapter.getPosition());
         outState.putString(AppCodes.KEY_MOVIE_LIST_TYPE, movieListType);
         outState.putInt(AppCodes.KEY_CURRENT_PAGE, currentPage);
+        outState.putString(AppCodes.KEY_CURRENT_QUERY_STRING, queryString);
         outState.putBoolean(AppCodes.KEY_FIRST_FETCH, firstFetch);
     }
 
@@ -317,7 +337,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
                     break;
             }
             item.setChecked(true);
-            fetchMovies(1, movieListType);
+            fetchMovies(null, 1, movieListType);
         }
 
         return super.onOptionsItemSelected(item);

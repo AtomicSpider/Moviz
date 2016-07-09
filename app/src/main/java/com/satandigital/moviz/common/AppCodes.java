@@ -29,10 +29,13 @@ public class AppCodes {
     public static final String CALLBACK_REFRESH_FAVORITES = "CALLBACK_REFRESH_FAVORITES";
     public static final String CALLBACK_VIEW_SEARCH_RESULTS = "CALLBACK_VIEW_SEARCH_RESULTS";
 
+    public static final String CALLBACK_FETCH_POPULAR = "CALLBACK_FETCH_POPULAR";
+
     //MoviesListFragment
     public static final String KEY_MOVIE_OBJECTS = "KEY_MOVIE_OBJECTS";
     public static final String KEY_MOVIE_LIST_TYPE = "KEY_MOVIE_LIST_TYPE";
     public static final String KEY_CURRENT_PAGE = "KEY_CURRENT_PAGE";
+    public static final String KEY_CURRENT_QUERY_STRING = "KEY_CURRENT_QUERY_STRING";
     public static final String KEY_LIST_POSITION = "KEY_LIST_POSITION";
     public static final String KEY_FIRST_FETCH = "KEY_FIRST_FETCH";
 

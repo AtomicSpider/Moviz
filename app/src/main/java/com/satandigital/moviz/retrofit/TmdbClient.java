@@ -26,6 +26,8 @@ public class TmdbClient {
     private TmdbApi.TopRatedMovies topRatedMovies;
     private TmdbApi.NowPlayingMovies nowPlayingMovies;
     private TmdbApi.UpcomingMovies upcomingMovies;
+    private TmdbApi.SearchMovies searchMovies;
+
     private TmdbApi.MovieVideos movieVideos;
     private TmdbApi.MovieReviews movieReviews;
 
@@ -71,6 +73,13 @@ public class TmdbClient {
             upcomingMovies = mRetrofit.create(TmdbApi.UpcomingMovies.class);
         }
         return upcomingMovies;
+    }
+
+    public TmdbApi.SearchMovies getSearchMoviesClient() {
+        if (searchMovies == null) {
+            searchMovies = mRetrofit.create(TmdbApi.SearchMovies.class);
+        }
+        return searchMovies;
     }
 
     public TmdbApi.MovieVideos getMovieVideosClient() {
