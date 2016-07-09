@@ -18,7 +18,7 @@ import com.satandigital.moviz.activities.MainActivity;
 import com.satandigital.moviz.callbacks.MovieDetailCallback;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
-import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.objects.MovieObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -124,14 +124,10 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         movieDetailCallback.CallbackRequest(AppCodes.CALLBACK_MOVIE_BUNDLE, bundle);
     }
 
-    public void clearAllAndPopulate(ArrayList<MovieObject> movies) {
-        movieObjects.clear();
-        movieObjects.addAll(movies);
-        notifyDataSetChanged();
-    }
-
-    public void addItemsAndPopulate(ArrayList<MovieObject> movies) {
-        movieObjects.addAll(movies);
+    public void populateView(boolean paging, boolean add, ArrayList<MovieObject> movies) {
+        this.paging = paging;
+        if (!add) movieObjects.clear();
+        if (movies.size() > 0) movieObjects.addAll(movies);
         notifyDataSetChanged();
     }
 
@@ -139,11 +135,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         return movieObjects;
     }
 
-    public int getListPosition() {
+    public int getPosition() {
         return listPosition;
-    }
-
-    public void setPaging(boolean b) {
-        paging = b;
     }
 }

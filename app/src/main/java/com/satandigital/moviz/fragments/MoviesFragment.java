@@ -24,9 +24,9 @@ import com.satandigital.moviz.callbacks.MovieDetailCallback;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
-import com.satandigital.moviz.models.MovieObject;
-import com.satandigital.moviz.models.RecyclerViewWithEmptyView;
-import com.satandigital.moviz.models.TmdbRawMoviesObject;
+import com.satandigital.moviz.models.objects.MovieObject;
+import com.satandigital.moviz.models.views.RecyclerViewWithEmptyView;
+import com.satandigital.moviz.models.objects.TmdbRawMoviesObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
 
 import java.util.ArrayList;
@@ -58,9 +58,9 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
     //Data
     private boolean isFetchOngoing = false;
+    private boolean firstFetch = true;
     private String movieListType;
     private int currentPage = 1;
-    private boolean firstDisplay = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,20 +83,19 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        movieListType = MovizApp.movieListType;
+        movieListType = MovizApp.savedMovieListType;
         MainActivity.setCallback(this);
 
         movieDetailCallback = (MovieDetailCallback) getActivity();
 
         if (savedInstanceState == null) fetchMovies(1, movieListType);
         else {
-            currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
-            firstDisplay = savedInstanceState.getBoolean(AppCodes.KEY_FIRST_DISPLAY);
+            firstFetch = savedInstanceState.getBoolean(AppCodes.KEY_FIRST_FETCH);
             movieListType = savedInstanceState.getString(AppCodes.KEY_MOVIE_LIST_TYPE);
+            currentPage = savedInstanceState.getInt(AppCodes.KEY_CURRENT_PAGE);
             ArrayList<MovieObject> movieObjects = savedInstanceState.getParcelableArrayList(AppCodes.KEY_MOVIE_OBJECTS);
-            if (movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) mAdapter.setPaging(false);
-            else mAdapter.setPaging(true);
-            mAdapter.clearAllAndPopulate(movieObjects);
+
+            populateRecyclerView(movieListType, movieObjects);
             mRecyclerView.scrollToPosition(savedInstanceState.getInt(AppCodes.KEY_LIST_POSITION));
         }
     }
@@ -104,7 +103,8 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     @Override
     public void onResume() {
         super.onResume();
-        if (movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) fetchMovies(1, movieListType);
+        //ToDo stop repeat at start
+        //if (movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) fetchMovies(1, movieListType);
     }
 
     private void setRecyclerView() {
@@ -113,8 +113,35 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         mAdapter = new MoviesRecyclerViewAdapter(getActivity());
         mAdapter.setCallback(this);
         mAdapter.setMovieDetailCallback(this);
-        mRecyclerView.setEmptyView(emptyView);
+        mRecyclerView.setUpEmptyView(getActivity(), emptyView);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void populateRecyclerView(String movieListType, ArrayList<MovieObject> movieObjects) {
+        if (movieObjects == null || movieObjects.size() == 0) {
+            if (AppCodes.PREF_MOVIE_LIST_FAVORITES.equals(movieListType)) {
+                mRecyclerView.setState(AppCodes.STATE_NO_FAV);
+                mAdapter.populateView(false, false, new ArrayList<MovieObject>());
+                Toast.makeText(getActivity(), "No movies added to favorites", Toast.LENGTH_SHORT).show();
+            } else {
+                if (movieListType.equals(MovizApp.savedMovieListType) && !firstFetch)
+                    mAdapter.populateView(false, true, new ArrayList<MovieObject>());
+                else {
+                    mRecyclerView.setState(AppCodes.STATE_NO_NETWORK);
+                    mAdapter.populateView(false, false, new ArrayList<MovieObject>());
+                    Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            if (AppCodes.PREF_MOVIE_LIST_FAVORITES.equals(movieListType)) {
+                mAdapter.populateView(false, false, movieObjects);
+            } else {
+                if (currentPage == 1) mAdapter.populateView(true, false, movieObjects);
+                else mAdapter.populateView(true, true, movieObjects);
+            }
+        }
+
+        firstFetch = false;
     }
 
     @Override
@@ -135,18 +162,12 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
     @Override
     public void CallbackRequest(String request, ArrayList<MovieObject> movieObjects) {
+        //Data from database query
+
         currentPage = 1;
-        firstDisplay = false;
-        Log.d(TAG, "Saving pref as: " + movieListType);
-        Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
-        if (movieObjects != null && movieObjects.size() > 0) {
-            mAdapter.setPaging(false);
-            mAdapter.clearAllAndPopulate(movieObjects);
-        } else {
-            mAdapter.setPaging(false);
-            mAdapter.clearAllAndPopulate(new ArrayList<MovieObject>());
-            Toast.makeText(getActivity(), "No movies added to Favorites", Toast.LENGTH_SHORT).show();
-        }
+
+        populateRecyclerView(movieListType, movieObjects);
+        saveIfNecessary(movieListType);
 
         isFetchOngoing = false;
         toggleProgressBar(false);
@@ -164,57 +185,52 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
         if (!mListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
             Call<TmdbRawMoviesObject> call = null;
-            if (mListType.equals(AppCodes.PREF_MOVIE_LIST_POPULAR)) {
-                call = TmdbClient.getInstance(getActivity())
-                        .getPopularMoviesClient()
-                        .getPopularMovies(nextPage);
-            } else if (mListType.equals(AppCodes.PREF_MOVIE_LIST_TOP_RATED)) {
-                call = TmdbClient.getInstance(getActivity())
-                        .getTopRatedMoviesClient()
-                        .getTopRatedMovies(nextPage);
+            switch (mListType) {
+                case AppCodes.PREF_MOVIE_LIST_POPULAR:
+                    call = TmdbClient.getInstance(getActivity())
+                            .getPopularMoviesClient()
+                            .getPopularMovies(nextPage);
+                    break;
+                case AppCodes.PREF_MOVIE_LIST_TOP_RATED:
+                    call = TmdbClient.getInstance(getActivity())
+                            .getTopRatedMoviesClient()
+                            .getTopRatedMovies(nextPage);
+                    break;
+                case AppCodes.PREF_MOVIE_LIST_NOW_PLAYING:
+                    call = TmdbClient.getInstance(getActivity())
+                            .getNowPlayingMoviesClient()
+                            .getNowPlayingMovies(nextPage);
+                    break;
+                case AppCodes.PREF_MOVIE_LIST_UPCOMING:
+                    call = TmdbClient.getInstance(getActivity())
+                            .getUpcomingMoviesClient()
+                            .getUpcomingMovies(nextPage);
+                    break;
             }
             Callback<TmdbRawMoviesObject> callback = new Callback<TmdbRawMoviesObject>() {
                 @Override
                 public void onResponse(Call<TmdbRawMoviesObject> call, Response<TmdbRawMoviesObject> response) {
                     if (response.isSuccessful()) {
-                        firstDisplay = false;
                         Log.i(TAG, "Retrofit Response Successful");
 
                         currentPage = response.body().getPage();
-                        mAdapter.setPaging(true);
-                        if (currentPage == 1)
-                            mAdapter.clearAllAndPopulate(response.body().getResults());
-                        else mAdapter.addItemsAndPopulate(response.body().getResults());
+                        populateRecyclerView(movieListType, response.body().getResults());
                     } else {
-                        Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Retrofit Response Failure" + response.message());
-                        CleanRecyclerView();
+                        populateRecyclerView(movieListType, new ArrayList<MovieObject>());
                     }
-                    Log.d(TAG, "Saving pref as: " + movieListType);
-                    Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
 
+                    saveIfNecessary(movieListType);
                     fetchEnded();
                 }
 
                 @Override
                 public void onFailure(Call<TmdbRawMoviesObject> call, Throwable t) {
-                    CleanRecyclerView();
-
-                    Log.d(TAG, "Saving pref as: " + movieListType);
-                    Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, movieListType);
-
-                    Toast.makeText(getActivity(), "Oops, Something went wrong", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Retrofit Failure" + t.getMessage());
+                    populateRecyclerView(movieListType, new ArrayList<MovieObject>());
 
+                    saveIfNecessary(movieListType);
                     fetchEnded();
-                }
-
-                private void CleanRecyclerView() {
-
-                    if (!movieListType.equals(MovizApp.movieListType) || firstDisplay)
-                        mAdapter.clearAllAndPopulate(new ArrayList<MovieObject>());
-
-                    firstDisplay = false;
                 }
 
                 private void fetchEnded() {
@@ -237,10 +253,10 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(AppCodes.KEY_MOVIE_OBJECTS, mAdapter.getMovieObjects());
-        outState.putInt(AppCodes.KEY_LIST_POSITION, mAdapter.getListPosition());
+        outState.putInt(AppCodes.KEY_LIST_POSITION, mAdapter.getPosition());
         outState.putString(AppCodes.KEY_MOVIE_LIST_TYPE, movieListType);
         outState.putInt(AppCodes.KEY_CURRENT_PAGE, currentPage);
-        outState.putBoolean(AppCodes.KEY_FIRST_DISPLAY, firstDisplay);
+        outState.putBoolean(AppCodes.KEY_FIRST_FETCH, firstFetch);
     }
 
     @Override
@@ -249,12 +265,18 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
 
         inflater.inflate(R.menu.menu_details, menu);
 
-        switch (MovizApp.movieListType) {
+        switch (MovizApp.savedMovieListType) {
             case AppCodes.PREF_MOVIE_LIST_POPULAR:
                 menu.findItem(R.id.action_popular).setChecked(true);
                 break;
             case AppCodes.PREF_MOVIE_LIST_TOP_RATED:
                 menu.findItem(R.id.action_top_rated).setChecked(true);
+                break;
+            case AppCodes.PREF_MOVIE_LIST_NOW_PLAYING:
+                menu.findItem(R.id.action_now_playing).setChecked(true);
+                break;
+            case AppCodes.PREF_MOVIE_LIST_UPCOMING:
+                menu.findItem(R.id.action_upcoming).setChecked(true);
                 break;
             case AppCodes.PREF_MOVIE_LIST_FAVORITES:
                 menu.findItem(R.id.action_favorites).setChecked(true);
@@ -278,6 +300,16 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
                     getActivity().setTitle("Top Rated");
                     movieListType = AppCodes.PREF_MOVIE_LIST_TOP_RATED;
                     break;
+                case R.id.action_now_playing:
+                    Log.d(TAG, "Now Playing");
+                    getActivity().setTitle("Now Playing");
+                    movieListType = AppCodes.PREF_MOVIE_LIST_NOW_PLAYING;
+                    break;
+                case R.id.action_upcoming:
+                    Log.d(TAG, "Upcoming");
+                    getActivity().setTitle("Upcoming");
+                    movieListType = AppCodes.PREF_MOVIE_LIST_UPCOMING;
+                    break;
                 case R.id.action_favorites:
                     Log.d(TAG, "Favorites");
                     getActivity().setTitle("Favorites");
@@ -289,5 +321,12 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveIfNecessary(String type) {
+        if (!type.equals(MovizApp.savedMovieListType)) {
+            Log.d(TAG, "Saving pref as: " + type);
+            Utils.saveToSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, type);
+        }
     }
 }

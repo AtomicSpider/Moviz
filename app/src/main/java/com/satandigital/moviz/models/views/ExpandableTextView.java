@@ -1,4 +1,4 @@
-package com.satandigital.moviz.models;
+package com.satandigital.moviz.models.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;

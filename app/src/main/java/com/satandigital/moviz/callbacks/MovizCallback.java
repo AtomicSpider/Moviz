@@ -1,6 +1,6 @@
 package com.satandigital.moviz.callbacks;
 
-import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.objects.MovieObject;
 
 import java.util.ArrayList;
 

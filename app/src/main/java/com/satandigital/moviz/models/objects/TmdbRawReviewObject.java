@@ -1,4 +1,4 @@
-package com.satandigital.moviz.models;
+package com.satandigital.moviz.models.objects;
 
 import android.os.Parcel;
 import android.os.Parcelable;

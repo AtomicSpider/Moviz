@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.satandigital.moviz.models.RecyclerViewWithEmptyView
+        <com.satandigital.moviz.models.views.RecyclerViewWithEmptyView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,7 +25,8 @@
             android:layout_gravity="center"
             android:drawablePadding="10dp"
             android:drawableTop="@drawable/ic_empty_48_0"
-            android:text="Oops, Nothing to see here."
+            android:gravity="center"
+            android:text="@string/no_network_text"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp"
             android:textStyle="bold"

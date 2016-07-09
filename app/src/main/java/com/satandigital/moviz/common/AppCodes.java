@@ -12,7 +12,10 @@ public class AppCodes {
     public static final String PREF_MOVIE_LIST_TYPE = "PREF_MOVIE_LIST_TYPE";
     public static final String PREF_MOVIE_LIST_POPULAR = "popular";
     public static final String PREF_MOVIE_LIST_TOP_RATED = "top_rated";
+    public static final String PREF_MOVIE_LIST_NOW_PLAYING = "now_playing";
+    public static final String PREF_MOVIE_LIST_UPCOMING = "upcoming";
     public static final String PREF_MOVIE_LIST_FAVORITES = "favorites";
+    public static final String PREF_MOVIE_LIST_SEARCH = "search";
 
     //Callbacks
     public static final String CALLBACK_FETCH_MOVIES_WITH_PAGE = "CALLBACK_FETCH_MOVIES_WITH_PAGE";
@@ -31,7 +34,7 @@ public class AppCodes {
     public static final String KEY_MOVIE_LIST_TYPE = "KEY_MOVIE_LIST_TYPE";
     public static final String KEY_CURRENT_PAGE = "KEY_CURRENT_PAGE";
     public static final String KEY_LIST_POSITION = "KEY_LIST_POSITION";
-    public static final String KEY_FIRST_DISPLAY = "KEY_FIRST_DISPLAY";
+    public static final String KEY_FIRST_FETCH = "KEY_FIRST_FETCH";
 
     //DetailsFragment
     public static final String KEY_MOVIE_OBJECT = "KEY_MOVIE_OBJECT";
@@ -47,4 +50,8 @@ public class AppCodes {
     public static final String TASK_DELETE_FAVORITE = "TASK_DELETE_FAVORITE";
     public static final String TASK_ADD_FAVORITE = "TASK_ADD_FAVORITE";
     public static final String TASK_QUERY_FAVORITE_LIST = "TASK_QUERY_FAVORITE_LIST";
+
+    //RecyclerViewWithEmptyView States
+    public static final String STATE_NO_NETWORK = "STATE_NO_NETWORK";
+    public static final String STATE_NO_FAV = "STATE_NO_FAV";
 }

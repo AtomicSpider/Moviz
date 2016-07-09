@@ -25,12 +25,12 @@ import com.satandigital.moviz.asynctasks.DatabaseTask;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
-import com.satandigital.moviz.models.ExpandableTextView;
-import com.satandigital.moviz.models.MovieObject;
-import com.satandigital.moviz.models.ReviewObject;
-import com.satandigital.moviz.models.TmdbRawReviewObject;
-import com.satandigital.moviz.models.TmdbRawVideosObject;
-import com.satandigital.moviz.models.VideoObject;
+import com.satandigital.moviz.models.views.ExpandableTextView;
+import com.satandigital.moviz.models.objects.MovieObject;
+import com.satandigital.moviz.models.objects.ReviewObject;
+import com.satandigital.moviz.models.objects.TmdbRawReviewObject;
+import com.satandigital.moviz.models.objects.TmdbRawVideosObject;
+import com.satandigital.moviz.models.objects.VideoObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
 import com.squareup.picasso.Picasso;
 
@@ -286,7 +286,7 @@ public class DetailsFragment extends Fragment implements MovizCallback {
                     Log.i(TAG, "Movie deleted from Favorites");
                     isFavorite = false;
                     fab.setImageResource(R.drawable.ic_heart_disabled_24_4);
-                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
+                    if (MovizApp.savedMovieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES) && MainActivity.twoPane) {
                         Log.i(TAG, "Refresh Favorites List");
                         mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
                     }
@@ -302,7 +302,7 @@ public class DetailsFragment extends Fragment implements MovizCallback {
                     Log.i(TAG, "Movie added to Favorites");
                     isFavorite = true;
                     fab.setImageResource(R.drawable.ic_heart_24_4);
-                    if (MovizApp.movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) {
+                    if (MovizApp.savedMovieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES) && MainActivity.twoPane) {
                         Log.i(TAG, "Refresh Favorites List");
                         mCallback.CallbackRequest(AppCodes.CALLBACK_REFRESH_FAVORITES, "");
                     }

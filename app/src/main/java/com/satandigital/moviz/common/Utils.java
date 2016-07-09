@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.satandigital.moviz.MovizApp;
 import com.satandigital.moviz.database.MoviesContract;
-import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.objects.MovieObject;
 
 /**
  * Project : Moviz
@@ -22,7 +22,7 @@ public final class Utils {
         mEditor.apply();
 
         //Update local reference
-        MovizApp.movieListType = sValue;
+        MovizApp.savedMovieListType = sValue;
     }
 
     public static String readSharedPreferences(String key, String valueDefault) {

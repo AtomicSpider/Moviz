@@ -1,8 +1,8 @@
 package com.satandigital.moviz.retrofit;
 
-import com.satandigital.moviz.models.TmdbRawMoviesObject;
-import com.satandigital.moviz.models.TmdbRawReviewObject;
-import com.satandigital.moviz.models.TmdbRawVideosObject;
+import com.satandigital.moviz.models.objects.TmdbRawMoviesObject;
+import com.satandigital.moviz.models.objects.TmdbRawReviewObject;
+import com.satandigital.moviz.models.objects.TmdbRawVideosObject;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -22,6 +22,16 @@ public class TmdbApi {
     public interface TopRatedMovies {
         @GET("movie/top_rated")
         Call<TmdbRawMoviesObject> getTopRatedMovies(@Query("page") Integer page);
+    }
+
+    public interface NowPlayingMovies {
+        @GET("movie/now_playing")
+        Call<TmdbRawMoviesObject> getNowPlayingMovies(@Query("page") Integer page);
+    }
+
+    public interface UpcomingMovies {
+        @GET("movie/upcoming")
+        Call<TmdbRawMoviesObject> getUpcomingMovies(@Query("page") Integer page);
     }
 
     public interface MovieVideos {

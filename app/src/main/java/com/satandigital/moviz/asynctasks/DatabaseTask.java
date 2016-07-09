@@ -10,7 +10,7 @@ import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
 import com.satandigital.moviz.database.MoviesContract;
-import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.objects.MovieObject;
 
 import java.util.ArrayList;
 

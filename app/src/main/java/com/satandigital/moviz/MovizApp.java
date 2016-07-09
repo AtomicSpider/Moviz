@@ -17,7 +17,7 @@ public class MovizApp extends Application {
     private String TAG = MovizApp.class.getSimpleName();
 
     public static SharedPreferences mSharedPreferences;
-    public static String movieListType;
+    public static String savedMovieListType;
     public static boolean itemAutoSelect = true;
 
     @Override
@@ -25,7 +25,11 @@ public class MovizApp extends Application {
         super.onCreate();
 
         mSharedPreferences = getSharedPreferences(AppCodes.prefName, Context.MODE_PRIVATE);
-        movieListType = Utils.readSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, AppCodes.PREF_MOVIE_LIST_POPULAR);
-        Log.i(TAG, "Pref: " + movieListType);
+        savedMovieListType = Utils.readSharedPreferences(AppCodes.PREF_MOVIE_LIST_TYPE, AppCodes.PREF_MOVIE_LIST_POPULAR);
+
+        //Switch to popular if in search state
+        if (AppCodes.PREF_MOVIE_LIST_SEARCH.equals(savedMovieListType))
+            savedMovieListType = AppCodes.PREF_MOVIE_LIST_POPULAR;
+        Log.i(TAG, "Pref: " + savedMovieListType);
     }
 }

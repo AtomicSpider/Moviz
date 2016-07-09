@@ -19,11 +19,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Project : Moviz
  * Created by Sanat Dutta on 6/27/2016.
  */
-public class TmdbClient  {
+public class TmdbClient {
     private static String BASE_URL = null;
 
     private TmdbApi.PopularMovies popularMovies;
     private TmdbApi.TopRatedMovies topRatedMovies;
+    private TmdbApi.NowPlayingMovies nowPlayingMovies;
+    private TmdbApi.UpcomingMovies upcomingMovies;
     private TmdbApi.MovieVideos movieVideos;
     private TmdbApi.MovieReviews movieReviews;
 
@@ -55,6 +57,20 @@ public class TmdbClient  {
             topRatedMovies = mRetrofit.create(TmdbApi.TopRatedMovies.class);
         }
         return topRatedMovies;
+    }
+
+    public TmdbApi.NowPlayingMovies getNowPlayingMoviesClient() {
+        if (nowPlayingMovies == null) {
+            nowPlayingMovies = mRetrofit.create(TmdbApi.NowPlayingMovies.class);
+        }
+        return nowPlayingMovies;
+    }
+
+    public TmdbApi.UpcomingMovies getUpcomingMoviesClient() {
+        if (upcomingMovies == null) {
+            upcomingMovies = mRetrofit.create(TmdbApi.UpcomingMovies.class);
+        }
+        return upcomingMovies;
     }
 
     public TmdbApi.MovieVideos getMovieVideosClient() {

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.satandigital.moviz.R;
-import com.satandigital.moviz.models.VideoObject;
+import com.satandigital.moviz.models.objects.VideoObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -129,7 +129,7 @@
                 android:textColor="@color/blue_800"
                 android:textSize="14sp" />
 
-            <com.satandigital.moviz.models.ExpandableTextView
+            <com.satandigital.moviz.models.views.ExpandableTextView
                 android:id="@+id/overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                     android:layout_gravity="right|bottom"
                     android:background="@android:color/transparent"
                     android:padding="16dp" />
-            </com.satandigital.moviz.models.ExpandableTextView>
+            </com.satandigital.moviz.models.views.ExpandableTextView>
 
             <LinearLayout
                 android:id="@+id/videosLL"
@@ -210,7 +210,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <com.satandigital.moviz.models.ExpandableTextView
+                    <com.satandigital.moviz.models.views.ExpandableTextView
                         android:id="@+id/review1_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
                             android:layout_gravity="right|bottom"
                             android:background="@android:color/transparent"
                             android:padding="16dp" />
-                    </com.satandigital.moviz.models.ExpandableTextView>
+                    </com.satandigital.moviz.models.views.ExpandableTextView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -248,7 +248,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <com.satandigital.moviz.models.ExpandableTextView
+                    <com.satandigital.moviz.models.views.ExpandableTextView
                         android:id="@+id/review2_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                             android:layout_gravity="right|bottom"
                             android:background="@android:color/transparent"
                             android:padding="16dp" />
-                    </com.satandigital.moviz.models.ExpandableTextView>
+                    </com.satandigital.moviz.models.views.ExpandableTextView>
                 </LinearLayout>
             </LinearLayout>
 

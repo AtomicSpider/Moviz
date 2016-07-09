@@ -11,9 +11,9 @@ import com.satandigital.moviz.R;
 import com.satandigital.moviz.adapters.ReviewsRecyclerViewAdapter;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
-import com.satandigital.moviz.models.MovieObject;
-import com.satandigital.moviz.models.ReviewObject;
-import com.satandigital.moviz.models.TmdbRawReviewObject;
+import com.satandigital.moviz.models.objects.MovieObject;
+import com.satandigital.moviz.models.objects.ReviewObject;
+import com.satandigital.moviz.models.objects.TmdbRawReviewObject;
 import com.satandigital.moviz.retrofit.TmdbClient;
 
 import java.util.ArrayList;

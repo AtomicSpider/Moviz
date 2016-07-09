@@ -15,6 +15,12 @@
                     android:id="@+id/action_top_rated"
                     android:title="@string/top_rated" />
                 <item
+                    android:id="@+id/action_now_playing"
+                    android:title="@string/now_playing" />
+                <item
+                    android:id="@+id/action_upcoming"
+                    android:title="@string/upcoming" />
+                <item
                     android:id="@+id/action_favorites"
                     android:title="@string/favorites" />
             </group>

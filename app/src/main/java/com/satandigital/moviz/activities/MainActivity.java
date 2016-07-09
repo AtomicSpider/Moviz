@@ -17,7 +17,7 @@ import com.satandigital.moviz.callbacks.MovieDetailCallback;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.fragments.DetailsFragment;
-import com.satandigital.moviz.models.MovieObject;
+import com.satandigital.moviz.models.objects.MovieObject;
 
 import java.util.ArrayList;
 
@@ -60,12 +60,18 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
     private void setUpTitle() {
 
         //Set title from preference
-        switch (MovizApp.movieListType) {
+        switch (MovizApp.savedMovieListType) {
             case AppCodes.PREF_MOVIE_LIST_POPULAR:
                 setTitle("Popular");
                 break;
             case AppCodes.PREF_MOVIE_LIST_TOP_RATED:
                 setTitle("Top Rated");
+                break;
+            case AppCodes.PREF_MOVIE_LIST_NOW_PLAYING:
+                setTitle("Now Playing");
+                break;
+            case AppCodes.PREF_MOVIE_LIST_UPCOMING:
+                setTitle("Upcoming");
                 break;
             case AppCodes.PREF_MOVIE_LIST_FAVORITES:
                 setTitle("Favorites");
