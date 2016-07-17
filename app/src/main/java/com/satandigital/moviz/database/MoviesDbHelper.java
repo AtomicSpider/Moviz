@@ -27,20 +27,20 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_MOVIES_TABLE = "CREATE TABLE " + MoviesEntry.TABLE_NAME + " (" +
                 MoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
-                MoviesEntry.COLUMN_ADULT + " INTEGER NOT NULL, " +
-                MoviesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                MoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL," +
-                MoviesEntry.COLUMN_GENRE_IDS + " TEXT NOT NULL, " +
-                MoviesEntry.COLUMN_ID + " INTEGER NOT NULL," +
-                MoviesEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
-                MoviesEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
-                MoviesEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                MoviesEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
-                MoviesEntry.COLUMN_POPULARITY + " REAL NOT NULL, " +
-                MoviesEntry.COLUMN_VOTE_COUNT + " INTEGER NOT NULL, " +
-                MoviesEntry.COLUMN_VIDEO + " INTEGER NOT NULL, " +
-                MoviesEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL" + ")";
+                MoviesEntry.COLUMN_POSTER_PATH + " TEXT, " +
+                MoviesEntry.COLUMN_ADULT + " INTEGER, " +
+                MoviesEntry.COLUMN_OVERVIEW + " TEXT, " +
+                MoviesEntry.COLUMN_RELEASE_DATE + " TEXT," +
+                MoviesEntry.COLUMN_GENRE_IDS + " TEXT, " +
+                MoviesEntry.COLUMN_ID + " INTEGER," +
+                MoviesEntry.COLUMN_ORIGINAL_TITLE + " TEXT, " +
+                MoviesEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT, " +
+                MoviesEntry.COLUMN_TITLE + " TEXT, " +
+                MoviesEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
+                MoviesEntry.COLUMN_POPULARITY + " REAL, " +
+                MoviesEntry.COLUMN_VOTE_COUNT + " INTEGER, " +
+                MoviesEntry.COLUMN_VIDEO + " INTEGER, " +
+                MoviesEntry.COLUMN_VOTE_AVERAGE + " REAL" + ")";
 
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIES_TABLE);
     }
