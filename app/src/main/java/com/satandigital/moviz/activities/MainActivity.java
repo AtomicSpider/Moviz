@@ -145,17 +145,15 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
             }
         });
 
+        //ToDo enable-disable sort menu option
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-
-                //ToDo disable sort
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                //ToDo enablesort
 
                 Log.d(TAG, "Collapse");
                 queryString = null;
