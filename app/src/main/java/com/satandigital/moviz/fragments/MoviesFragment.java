@@ -59,6 +59,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     //Data
     private boolean isFetchOngoing = false;
     private boolean firstFetch = true;
+    private boolean skipRefresh = false;
     private boolean manualMenuCheck = false;
     private String movieListType;
     private int currentPage = 1;
@@ -106,8 +107,9 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     @Override
     public void onResume() {
         super.onResume();
-        //ToDo stop repeat at start
-        //if (movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES)) fetchMovies(1, movieListType);
+        if (movieListType.equals(AppCodes.PREF_MOVIE_LIST_FAVORITES) && skipRefresh)
+            fetchMovies("", 1, movieListType);
+        skipRefresh = true;
     }
 
     private void setRecyclerView() {
