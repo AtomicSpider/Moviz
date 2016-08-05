@@ -25,12 +25,12 @@ import com.satandigital.moviz.asynctasks.DatabaseTask;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
-import com.satandigital.moviz.models.views.ExpandableTextView;
 import com.satandigital.moviz.models.objects.MovieObject;
 import com.satandigital.moviz.models.objects.ReviewObject;
 import com.satandigital.moviz.models.objects.TmdbRawReviewObject;
 import com.satandigital.moviz.models.objects.TmdbRawVideosObject;
 import com.satandigital.moviz.models.objects.VideoObject;
+import com.satandigital.moviz.models.views.ExpandableTextView;
 import com.satandigital.moviz.retrofit.TmdbClient;
 import com.squareup.picasso.Picasso;
 

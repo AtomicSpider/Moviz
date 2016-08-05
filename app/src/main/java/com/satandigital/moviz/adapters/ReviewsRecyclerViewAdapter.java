@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
-import com.satandigital.moviz.models.views.ExpandableTextView;
 import com.satandigital.moviz.models.objects.ReviewObject;
+import com.satandigital.moviz.models.views.ExpandableTextView;
 
 import java.util.ArrayList;
 

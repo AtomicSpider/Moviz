@@ -25,8 +25,8 @@ import com.satandigital.moviz.callbacks.MovizCallback;
 import com.satandigital.moviz.common.AppCodes;
 import com.satandigital.moviz.common.Utils;
 import com.satandigital.moviz.models.objects.MovieObject;
-import com.satandigital.moviz.models.views.RecyclerViewWithEmptyView;
 import com.satandigital.moviz.models.objects.TmdbRawMoviesObject;
+import com.satandigital.moviz.models.views.RecyclerViewWithEmptyView;
 import com.satandigital.moviz.retrofit.TmdbClient;
 
 import java.util.ArrayList;

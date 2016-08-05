@@ -10,9 +10,6 @@ import android.widget.TextView;
 import com.satandigital.moviz.R;
 import com.satandigital.moviz.common.AppCodes;
 
-import butterknife.BindString;
-import butterknife.ButterKnife;
-
 /**
  * Project : Moviz
  * Created by Sanat Dutta on 7/6/2016.
