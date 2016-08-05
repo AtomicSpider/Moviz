@@ -59,6 +59,7 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
     //Data
     private boolean isFetchOngoing = false;
     private boolean firstFetch = true;
+    private boolean manualMenuCheck = false;
     private String movieListType;
     private int currentPage = 1;
     private String queryString = "Batman";
@@ -171,6 +172,8 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
             getActivity().setTitle("Popular");
             movieListType = AppCodes.PREF_MOVIE_LIST_POPULAR;
             fetchMovies(null, 1, movieListType);
+            manualMenuCheck = true;
+            getActivity().invalidateOptionsMenu();
         }
     }
 
@@ -302,6 +305,15 @@ public class MoviesFragment extends Fragment implements MovizCallback, MovieDeta
                 menu.findItem(R.id.action_favorites).setChecked(true);
                 break;
         }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        if (manualMenuCheck)
+            menu.findItem(R.id.action_popular).setChecked(true);
+        manualMenuCheck = false;
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

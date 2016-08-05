@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
 
     //Data
     public static boolean twoPane = false;
+    private boolean hideSortMenu = false;
     private String queryString = null;
 
     @Override
@@ -145,17 +146,21 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
             }
         });
 
-        //ToDo enable-disable sort menu option
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                Log.d(TAG, "Search Expanded");
+                hideSortMenu = true;
+                invalidateOptionsMenu();
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
 
-                Log.d(TAG, "Collapse");
+                Log.d(TAG, "Search Collapsed");
+                hideSortMenu = false;
+                invalidateOptionsMenu();
                 queryString = null;
                 mCallback.CallbackRequest(AppCodes.CALLBACK_FETCH_POPULAR, "");
                 return true;
@@ -163,6 +168,18 @@ public class MainActivity extends AppCompatActivity implements MovizCallback, Mo
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        Log.i(TAG, "OnPrepare()");
+        menu.findItem(R.id.action_popular).setEnabled(!hideSortMenu);
+        menu.findItem(R.id.action_top_rated).setEnabled(!hideSortMenu);
+        menu.findItem(R.id.action_now_playing).setEnabled(!hideSortMenu);
+        menu.findItem(R.id.action_upcoming).setEnabled(!hideSortMenu);
+        menu.findItem(R.id.action_favorites).setEnabled(!hideSortMenu);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
