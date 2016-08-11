@@ -4,14 +4,11 @@ Please get api key from https://www.themoviedb.org/ and include it in build.conf
 </br>
 ####TABLET VIEWS
 
-![alt tag](http://i.imgur.com/cpjoOe2.png)
+![alt tag](http://i.imgur.com/X8X9BG4.jpg)
 
 </br>
 ####PHONE VIEWS
 
-![alt tag](http://i.imgur.com/ETYziSg.png)
-
-</br>
-![alt tag](http://i.imgur.com/I6ExUUt.png)
+![alt tag](http://i.imgur.com/UdCUJ2T.png)
 
 
